@@ -1,1 +1,2 @@
-from .cli import *
+from .installdeps import *
+from .writedeps import *
