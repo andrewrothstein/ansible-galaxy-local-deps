@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
-python setup.py bdist_wheel
+rm -rf dist
+python setup.py sdist
 twine upload dist/*
