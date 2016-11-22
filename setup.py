@@ -19,7 +19,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.1',
+    version='0.0.2',
 
     description='ansible-galaxy installs role dependencies from meta/main.yml',
     long_description=long_description,
@@ -76,7 +76,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'pyyaml'
+        'PyYAML'
     ],
 
     # List additional groups of dependencies here (e.g. development
@@ -108,7 +108,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'ansible-galaxy-local-deps=lib.cli:main',
+            'ansible-galaxy-local-deps=ansiblegalaxylocaldeps.cli:main',
         ],
     },
 )
