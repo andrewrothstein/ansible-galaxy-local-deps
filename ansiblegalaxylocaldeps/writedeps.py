@@ -1,30 +1,50 @@
 import sys
 import yaml
 import os
+import logging
 
-def main(args=None):
-    meta_main = 'meta/main.yml'
-    print('looking for', meta_main, '...')
-    if os.path.isfile(meta_main):
-        print('found. looking for dependencies...')
-        with open(meta_main, 'r') as f:
-            y = yaml.load(f)
-            if 'dependencies' in y:
-                o = []
-                for d in y['dependencies']:
-                    if 'role' in d:
-                        if 'version' in d:
-                            o.append({'src' : d['role'], 'version' : d['version']})
-                        else:
-                            o.append({'src' : d['role']})
-                    else:
-                        print('ignoring', d)
-                with open('requirements.yml', 'w') as r:
-                    r.write(yaml.dump(o))
+def effkey(d):
+  if 'role' in d:
+    return 'role'
+  elif 'src' in d:
+    return 'src'
+  else:
+    return None
+
+def run():
+  log = logging.getLogger("ansible-galaxy-local-deps-write")
+
+  meta_main = 'meta/main.yml'
+  log.info('looking for {0}...'.format(meta_main))
+  if os.path.isfile(meta_main):
+    log.info('found. looking for dependencies in {0}...'.format(meta_main))
+    with open(meta_main, 'r') as f:
+      y = yaml.load(f)
+      if 'dependencies' in y:
+	log.info('found {0} dependencies...'.format(len(y['dependencies'])))
+	o = []
+	for d in y['dependencies']:
+	  key = effkey(d)
+          if key:
+	    r = d[key]
+            if 'version' in d:
+              o.append({'src' : r, 'version' : d['version']})
             else:
-                print('no dependencies')
-    else:
-        print(meta_main, 'not found.')
+              o.append({'src' : r})
+          else:
+            log.warn('ignoring {0}'.format(d))
 
-if __name__ == "__main__" :
-    main()
+	log.info('writing out requirements.yml...')
+	with open('requirements.yml', 'w') as r:
+          r.write(yaml.dump(o))
+      else:
+	log.info('no dependencies')
+  else:
+    log.info('{0} not found'.format(meta_main))
+
+def main():
+  logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+  )
+  run()
