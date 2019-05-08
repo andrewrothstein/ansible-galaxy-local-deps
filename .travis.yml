@@ -1,17 +1,19 @@
-# this file is *not* meant to cover or endorse the use of travis, but rather to
-# help confirm pull requests to this project.
-
+dist: xenial
+services:
+- docker
 language: python
-
-env:
-  - TOXENV=py26
-  - TOXENV=py27
-  - TOXENV=py33
-  - TOXENV=py34
-
-install: pip install tox
-
-script: tox
-
-notifications:
-  email: false
+python:
+- 3.7
+install:
+- pip install -r requirements.txt
+- pip install .
+script:
+- python -m unittest discover
+deploy:
+  provider: pypi
+  user: andrewrothstein
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+  password:
+    secure: UBAnNk20rnkx/zP/2lz51+jGqQZYNs2LcJiZCiXVVrOWBupt2mxw7WQZS75GcMxkklnt2nvyRXF3S/HSKTJdEOPejdO1kKFhHrcI3Qpd7FF/+iBXaSS6oc+RWnuZdXIehzaSzmCiTxsEwPkg3un47nDg9ar8c3aXdc/GofccNkRiCoLf0e2Ddtfq2LQiSl+XbI/QrOhz01gLM+Rx2R2zi7KvPZy2aJ2l8RYE2/dmyzGI2inR3ymE0Enpgj4Onek5aIthXgi5SRmjMPwRwVun4LUtY71Ry8cWuDmr6u5RqF4MouEVWVXnMLC3y6JyxjpUxGBbFJEPfH4zjtjmitJH3FSCSTyp7pe1GLmoLctlLVvSaImdXoLetWtfueO/PI+JA2o6xD0kJrEgqQmI4oPaZKmINmp54ChOBZkl6AQlvleSrWSs0Jl3rwWa5jZ3PY4Ui3ByMxjnEQQEAxUs9vNCRPanNBwxpCx1VrKpWrZsOPcpVxffwx9JVugCI81Hx/RvMrAKVpj9jIUG1+XYCX61O5qmNOFvw92kHeXucjEf4kBKCaE+FFXE2BsUB0hQdukGmhkcfAThC3FtHFV0XBrTGXkhGPW/b/z604btfq1PIvQDEoVGQxXQ5aHoFa0YoYCe/rSN6eaK+HH96dRBC8G0whKzwgD5t+F6uNiShNezVO0=
