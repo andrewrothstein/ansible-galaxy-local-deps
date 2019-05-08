@@ -20,8 +20,3 @@ setup(name='ansible-galaxy-local-deps',
         ]
       }
       )
-
-
-
-
-)
