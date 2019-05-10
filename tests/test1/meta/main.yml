@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: Andrew Rothstein
+dependencies:
+  - role: test-role-1
+  - role: test-role-2
+    version: v1.2.3
+  - src: test-role-3
+  - src: test-role-4
+    version: v2.3.4
