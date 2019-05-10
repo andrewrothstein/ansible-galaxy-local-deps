@@ -21,7 +21,7 @@ def dump_requirements_txt(
         dcb_ver: str,
         ansiblegalaxylocaldeps_ver: str
 ):
-    requirements_txt = """"
+    requirements_txt = """
 ansible-galaxy-local-deps == {0}
 dcb == {1}
 """.format(ansiblegalaxylocaldeps_ver, dcb_ver)
