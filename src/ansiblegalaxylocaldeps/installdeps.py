@@ -6,31 +6,24 @@ import sys
 
 import ansiblegalaxylocaldeps.deps as deps
 import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
+import ansiblegalaxylocaldeps.slurp as slurp
 
-from typing import Union
-
-def install(r, v):
+def install(r: str, v: str=None) -> None:
     log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install')
     log.info('installing {0} version {1}...'.format(r, v))
-    check_call(['ansible-galaxy', '-f', 'install', ','.join([r, v])])
+    p = ','.join([r, v]) if v is not None else r
+    check_call(['ansible-galaxy', '-f', 'install', p])
 
-def install_sans_ver(r):
-    log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install_sans_ver')
-    log.info('installing latest {0}...'.format(r))
-    check_call(['ansible-galaxy', '-f', 'install', r])
-
-def run(role_dir: str):
+def run(role_dir: str) -> None:
     log = logging.getLogger('ansible-galaxy-local-deps.installdeps.run')
-    o = deps.slurp(role_dir)
-    if o:
-        for d in o:
+    mm = slurp.slurp_meta_main(role_dir)
+    y = deps.extract_dependencies(mm)
+    if y:
+        for d in y:
             if 'role' in d:
-                if 'version' in d:
-                    install(d['role'], d['version'])
-                else:
-                    install_sans_ver(d['role'])
+                install(d['role'], d['version'] if 'version' in d else None)
             else:
-                print('ignoring', d)
+                log.info('ignoring key {}'.format(d))
         else:
             log.info('no dependencies')
 

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='ansible-galaxy-local-deps',
-      version='0.0.12',
+      version='0.0.13',
       description='CLI for building, tagging, and publishing Docker containers',
       url='http://github.com/andrewrothstein/ansible-galaxy-local-deps',
       author='Andrew Rothstein',
@@ -17,6 +17,7 @@ setup(name='ansible-galaxy-local-deps',
         'console_scripts': [
             'ansible-galaxy-local-deps-install=ansiblegalaxylocaldeps.installdeps:main',
             'ansible-galaxy-local-deps-write=ansiblegalaxylocaldeps.writedeps:main',
+            'gendottravis=ansiblegalaxylocaldeps.gendottravis:main'
         ]
       }
       )

@@ -2,26 +2,18 @@ import argparse
 import logging
 import os
 import sys
-from yaml import load, dump
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
 
 import ansiblegalaxylocaldeps.deps as deps
+import ansiblegalaxylocaldeps.dump as dump
 import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
+import ansiblegalaxylocaldeps.slurp as slurp
 
-from typing import Union
+def run(role_dir: str) -> None:
+  mm = slurp.slurp_meta_main(role_dir)
+  y = deps.extract_dependencies(mm)
+  dump.dump_requirements_yml(role_dir, y)
 
-def run(role_dir: str):
-  log = logging.getLogger('ansible-galaxy-local-deps.writedeps.run')
-  o = deps.slurp(role_dir)
-  of = os.path.join(role_dir, 'requirements.yml')
-  log.info('writing out {0} dependencies to {1}...'.format(len(o), of))
-  with open(of, 'w') as w:
-    w.write(dump(o))
-
-def main():
+def main() -> None:
   loggingsetup.go()
 
   parser = argparse.ArgumentParser(
