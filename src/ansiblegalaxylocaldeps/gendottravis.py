@@ -21,20 +21,17 @@ def dump_requirements_txt(
         dcb_ver: str,
         ansiblegalaxylocaldeps_ver: str
 ):
-    requirements_txt = """
-ansible-galaxy-local-deps == {0}
-dcb == {1}
-""".format(ansiblegalaxylocaldeps_ver, dcb_ver)
+    requirements_txt = '\n'.join([
+        'ansible-galaxy-local-deps == {}'.format(ansiblegalaxylocaldeps_ver),
+        'dcb == {}'.format(dcb_ver)
+        ])
     dump.dump_requirements_txt(role_dir, requirements_txt)
 
-def from_dcb_os(
-        role_dir: str,
-        python_ver: str,
-        dcb_ver: str,
-        ansiblegalaxylocaldepsver: str
+def from_dcb_os_yml(
+        osl: List[str],
+        python_ver: str
 ):
-    osl = slurp.slurp_dcb_os_yml(role_dir)
-    dtt = {
+    return {
         'dist': 'xenial',
         'sudo': 'required',
         'services': ['docker'],
@@ -43,10 +40,10 @@ def from_dcb_os(
         'branches' : {
             'except': ['/^v\d+\.\d+(\.\d+)?(-\S*)?$/']
         },
-        'env': fmt_ols(osl),
+        'env': fmt_osl(osl),
         'scripts': [
             'ansible-galaxy-local-deps-write',
-            ' '.join(
+            ' '.join([
                 'dcb',
                 '--upstreamgroup andrewrothstein',
                 '--upstreamapp docker-ansible-role',
@@ -55,9 +52,19 @@ def from_dcb_os(
                 '--writeall',
                 '--buildall',
                 '--pushall'
-                )
+                ])
             ]
     }
+
+
+def from_dcb_os(
+        role_dir: str,
+        python_ver: str,
+        dcb_ver: str,
+        ansiblegalaxylocaldeps_ver: str
+):
+    osl = slurp.slurp_dcb_os_yml(role_dir)
+    dtt = from_dcb_os_yml(osl, python_ver)
     dump.dump_dottravis_yml(role_dir, dtt)
     dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
 

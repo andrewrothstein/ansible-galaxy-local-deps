@@ -15,7 +15,7 @@ def effkey(d) -> Union[str, None]:
 def extract_dependencies(y):
   log = logging.getLogger('ansible-galaxy-local-deps.deps.extract_dependencies')
   o = []
-  if 'dependencies' in y:
+  if y is not None and 'dependencies' in y:
     for d in y['dependencies']:
       key = effkey(d)
       if key:
