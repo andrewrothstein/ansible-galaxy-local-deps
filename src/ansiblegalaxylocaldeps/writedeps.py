@@ -1,11 +1,15 @@
-import sys
-import yaml
-import os
-import logging
 import argparse
+import logging
+import os
+import sys
+from yaml import load, dump
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
-import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
 import ansiblegalaxylocaldeps.deps as deps
+import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
 
 from typing import Union
 
@@ -15,7 +19,7 @@ def run(role_dir: str):
   of = os.path.join(role_dir, 'requirements.yml')
   log.info('writing out {0} dependencies to {1}...'.format(len(o), of))
   with open(of, 'w') as w:
-    w.write(yaml.dump(o))
+    w.write(dump(o))
 
 def main():
   loggingsetup.go()

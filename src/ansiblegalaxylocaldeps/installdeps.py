@@ -1,22 +1,22 @@
-import sys
-import yaml
-import os
+import argparse
 import logging
+import os
 from subprocess import check_call
+import sys
 
-import ansiblegalaxylocaldeps.loggingsetup
-import ansiblegalaxylocaldeps.deps
+import ansiblegalaxylocaldeps.deps as deps
+import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
 
 from typing import Union
 
 def install(r, v):
     log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install')
     log.info('installing {0} version {1}...'.format(r, v))
-    check_call(['ansible-galaxy', '-f', 'install', ','.join(r, v)])
+    check_call(['ansible-galaxy', '-f', 'install', ','.join([r, v])])
 
 def install_sans_ver(r):
     log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install_sans_ver')
-    log.infor('installing latest {0}...'.format(r))
+    log.info('installing latest {0}...'.format(r))
     check_call(['ansible-galaxy', '-f', 'install', r])
 
 def run(role_dir: str):

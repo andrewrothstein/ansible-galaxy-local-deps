@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: andrewrothstein.unarchive-deps
+    version: v1.0.11
+  - role: andrewrothstein.pkg-upgrade

@@ -1,5 +1,9 @@
 import logging
-import yaml
+from yaml import load, dump
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 from typing import Union
 
 import ansiblegalaxylocaldeps.finder as finder
@@ -34,6 +38,6 @@ def slurp(role_dir: str):
   if meta_main:
     log.info('found. looking for dependencies in {0}...'.format(meta_main))
     with open(meta_main, 'r') as f:
-      y = yaml.load(f, Loader=yaml.FullLoader)
+      y = load(f, Loader=Loader)
     return extract_dependencies(y)
   return None
