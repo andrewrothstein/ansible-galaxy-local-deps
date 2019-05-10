@@ -27,7 +27,7 @@ def main():
   parser = argparse.ArgumentParser(
     description='generates a requirements.yml from an Ansible roles meta/main.yml file'
   )
-  parser.add_argument('roledirs', nargs='+', default=['.'])
+  parser.add_argument('roledirs', nargs='*', default=['.'])
   args = parser.parse_args()
   for roledir in args.roledirs:
     run(roledir)

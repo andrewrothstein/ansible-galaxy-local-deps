@@ -40,7 +40,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='uses ansible-galaxy to install all of an Ansible roles meta/main.yml specified requirements'
     )
-    parser.add_argument('roledirs', nargs='+', default=['.'])
+    parser.add_argument('roledirs', nargs='*', default=['.'])
     args = parser.parse_args()
     for roledir in args.roledirs:
         run(roledir)
