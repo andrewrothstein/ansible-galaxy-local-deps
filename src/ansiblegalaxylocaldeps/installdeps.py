@@ -1,36 +1,47 @@
 import sys
 import yaml
 import os
+import logging
 from subprocess import check_call
 
+import ansiblegalaxylocaldeps.loggingsetup
+import ansiblegalaxylocaldeps.deps
+
+from typing import Union
+
 def install(r, v):
-    print('installing', r, 'version', v, '...')
-    check_call(['ansible-galaxy', '-f', 'install', r + ',' + v])
+    log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install')
+    log.info('installing {0} version {1}...'.format(r, v))
+    check_call(['ansible-galaxy', '-f', 'install', ','.join(r, v)])
 
 def install_sans_ver(r):
-    print('installing latest', r, '...')
+    log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install_sans_ver')
+    log.infor('installing latest {0}...'.format(r))
     check_call(['ansible-galaxy', '-f', 'install', r])
 
-def main(args=None):
-    meta_main = 'meta/main.yml'
-    print('looking for', meta_main, '...')
-    if os.path.isfile(meta_main):
-        print('found. looking for dependencies...')
-        with open(meta_main, 'r') as f:
-            y = yaml.load(f)
-            if 'dependencies' in y:
-                for d in y['dependencies']:
-                    if 'role' in d:
-                        if 'version' in d:
-                            install(d['role'], d['version'])
-                        else:
-                            install_sans_ver(d['role'])
-                    else:
-                        print('ignoring', d)
+def run(role_dir: str):
+    log = logging.getLogger('ansible-galaxy-local-deps.installdeps.run')
+    o = deps.slurp(role_dir)
+    if o:
+        for d in o:
+            if 'role' in d:
+                if 'version' in d:
+                    install(d['role'], d['version'])
+                else:
+                    install_sans_ver(d['role'])
             else:
-                print('no dependencies')
-    else:
-        print(meta_main, 'not found.')
+                print('ignoring', d)
+        else:
+            log.info('no dependencies')
 
-if __name__ == "__main__" :
-    main()
+def main():
+    loggingsetup.go()
+
+    parser = argparse.ArgumentParser(
+        description='uses ansible-galaxy to install all of an Ansible roles meta/main.yml specified requirements'
+    )
+    parser.add_argument('roledirs', nargs='+', default=['.'])
+    args = parser.parse_args()
+    for roledir in args.roledirs:
+        run(roledir)
+
