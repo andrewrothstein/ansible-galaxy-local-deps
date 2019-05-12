@@ -41,7 +41,7 @@ def from_dcb_os_yml(
             'except': ['/^v\d+\.\d+(\.\d+)?(-\S*)?$/']
         },
         'env': fmt_osl(osl),
-        'scripts': [
+        'script': [
             'ansible-galaxy-local-deps-write',
             ' '.join([
                 'dcb',
@@ -90,7 +90,7 @@ def main():
     parser.add_argument('roledirs', nargs='*', default=['.'])
     parser.add_argument('-p', '--pythonver', default='3.7')
     parser.add_argument('-d', '--dcbver', default='0.0.17')
-    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.0.13')
+    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.0.14')
     parser.add_argument('-a', '--action', default='from_dottravis')
     args = parser.parse_args()
     for role_dir in args.roledirs:
