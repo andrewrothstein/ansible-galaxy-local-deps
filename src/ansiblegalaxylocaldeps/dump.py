@@ -22,14 +22,17 @@ def dump_yml(role_dir: str, f: str, y: str) -> None:
     with open(of, 'w') as w:
         w.write(ydump(y))
 
-def dump_requirements_yml(role_dir: str, y: str) -> None:
+def dump_meta_main(role_dir: str, y) -> None:
+    dump_yml(role_dir, os.path.join('meta', 'main.yml'), y)
+
+def dump_requirements_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, 'requirements.yml', y)
 
-def dump_dottravis_yml(role_dir: str, dott: str) -> None:
+def dump_dottravis_yml(role_dir: str, dott) -> None:
     dump_yml(role_dir, '.travis.yml', dott)
 
 def dump_requirements_txt(role_dir: str, t: str) -> None:
     dump_txt(role_dir, 'requirements.txt', t)
 
-def dump_dcb_os_yml(role_dir: str, y: str) -> None:
+def dump_dcb_os_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, 'dcb-os.yml', y)

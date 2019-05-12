@@ -17,7 +17,8 @@ setup(name='ansible-galaxy-local-deps',
         'console_scripts': [
             'ansible-galaxy-local-deps-install=ansiblegalaxylocaldeps.installdeps:main',
             'ansible-galaxy-local-deps-write=ansiblegalaxylocaldeps.writedeps:main',
-            'gendottravis=ansiblegalaxylocaldeps.gendottravis:main'
+            'gendottravis=ansiblegalaxylocaldeps.gendottravis:main',
+            'ansible-galaxy-local-deps-change-dep=ansiblegalaxylocaldeps.changedep:main'
         ]
       }
       )
