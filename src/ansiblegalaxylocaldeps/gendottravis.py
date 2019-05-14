@@ -12,6 +12,7 @@ def extract_osl_from_dottravis(dottravis) -> List[str]:
         for fmtos in dottravis['env']:
             if fmtos.startswith('OS='):
                 osl.append(fmtos[3:])
+        osl.sort()
         return osl
     return None
 
