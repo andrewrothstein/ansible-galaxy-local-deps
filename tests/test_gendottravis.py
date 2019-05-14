@@ -16,7 +16,8 @@ env:
 """, Loader=Loader)
         osl = extract_osl_from_dottravis(y)
         self.assertEqual(len(osl), 2, 'osl length')
-        self.assertEqual(osl[0], 'xyz', 'chopped OS= correctly')
+        self.assertEqual(osl[0], 'abc', 'chopped OS= correctly')
+        self.assertEqual(osl[1], 'xyz', 'chopped OS= correctly')
 
     def test_from_dcb_os_yml(self):
         osl = ['xyz', 'abc']
