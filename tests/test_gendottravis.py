@@ -25,5 +25,5 @@ env:
         r = from_dcb_os_yml(osl, python_ver)
         self.assertEqual(r['python'], python_ver)
         self.assertEqual(len(r['env']), 2)
-        self.assertEqual(r['env'][0], 'OS=xyz')
-        self.assertEqual(r['env'][1], 'OS=abc')
+        self.assertEqual(r['env'][0], 'OS=abc')
+        self.assertEqual(r['env'][1], 'OS=xyz')
