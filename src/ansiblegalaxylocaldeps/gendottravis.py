@@ -17,6 +17,7 @@ def extract_osl_from_dottravis(dottravis) -> List[str]:
     return None
 
 def fmt_osl(osl: List[str]) -> List[str]:
+    osl.sort()
     return ['OS={}'.format(o) for o in osl]
 
 def dump_requirements_txt(
@@ -67,9 +68,10 @@ def from_dcb_os(
         ansiblegalaxylocaldeps_ver: str
 ):
     osl = slurp.slurp_dcb_os_yml(role_dir)
-    dtt = from_dcb_os_yml(osl, python_ver)
-    dump.dump_dottravis_yml(role_dir, dtt)
-    dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
+    dtt = from_dcb_os_yml(osl, python_ver) if osl is not None else None
+    if dtt is not None:
+        dump.dump_dottravis_yml(role_dir, dtt)
+        dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
 
 def from_dottravis(
         role_dir: str,
