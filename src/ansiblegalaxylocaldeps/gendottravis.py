@@ -7,11 +7,13 @@ import ansiblegalaxylocaldeps.slurp as slurp
 
 
 def extract_osl_from_dottravis(dottravis) -> List[str]:
-    osl = []
-    for fmtos in dottravis['env']:
-        if fmtos.startswith('OS='):
-            osl.append(fmtos[3:])
-    return osl
+    if 'env' in dottravis:
+        osl = []
+        for fmtos in dottravis['env']:
+            if fmtos.startswith('OS='):
+                osl.append(fmtos[3:])
+        return osl
+    return None
 
 def fmt_osl(osl: List[str]) -> List[str]:
     return ['OS={}'.format(o) for o in osl]
@@ -75,12 +77,13 @@ def from_dottravis(
         ansiblegalaxylocaldeps_ver: str
 ):
     dtt = slurp.slurp_dottravis(role_dir)
-    osl = extract_osl_from_dottravis(dtt)
-    dtt['env'] = fmt_osl(osl)
-    dtt['python'] = python_ver
-    dump.dump_dottravis_yml(role_dir, dtt)
-    dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
-    dump.dump_dcb_os_yml(role_dir, osl)
+    osl = extract_osl_from_dottravis(dtt) if dtt is not None else None
+    if osl is not None:
+        dtt['env'] = fmt_osl(osl)
+        dtt['python'] = python_ver
+        dump.dump_dottravis_yml(role_dir, dtt)
+        dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
+        dump.dump_dcb_os_yml(role_dir, osl)
 
 def main():
     loggingsetup.go()
