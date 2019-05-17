@@ -19,7 +19,8 @@ setup(name='ansible-galaxy-local-deps',
             'ansible-galaxy-local-deps-write=ansiblegalaxylocaldeps.writedeps:main',
             'gendottravis=ansiblegalaxylocaldeps.gendottravis:main',
             'ansible-galaxy-local-deps-change-dep=ansiblegalaxylocaldeps.changedep:main',
-            'ansible-galaxy-local-deps-add-os=ansiblegalaxylocaldeps.addos:main'
+            'ansible-galaxy-local-deps-add-os=ansiblegalaxylocaldeps.addos:main',
+            'ansible-galaxy-local-deps-drop-os=ansiblegalaxylocaldeps.dropos:main'
         ]
       }
       )
