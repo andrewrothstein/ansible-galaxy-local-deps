@@ -1,4 +1,5 @@
 import argparse
+import logging
 from typing import List
 
 import ansiblegalaxylocaldeps.dump as dump
@@ -93,6 +94,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='generates a .travis.yml from building/testing Ansible roles with dcb/docker'
     )
+    log = logging.getLogger('ansible-galaxy-local-deps.gendottravis.main')
     parser.add_argument('roledirs', nargs='*', default=['.'])
     parser.add_argument('-p', '--pythonver', default='3.7')
     parser.add_argument('-d', '--dcbver', default='0.0.17')
