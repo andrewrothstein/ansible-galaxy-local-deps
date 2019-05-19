@@ -46,6 +46,17 @@ def from_dcb_os_yml(
             'except': ['/^v\d+\.\d+(\.\d+)?(-\S*)?$/']
         },
         'env': fmt_osl(osl),
+        'before_install': '\n'.join([
+            'if [[ "$TRAVIS_OS_NAME" == "osx" ]]',
+            'then',
+            '  brew upgrade openssl || brew install openssl || true',
+            '  brew upgrade python@3 || brew install python@3 || true',
+            '  brew upgrade md5sha1sum || brew install md5sha1sum || true',
+            '  virtualenv venv -p python',
+            '  source venv/bin/activate',
+            '  pip install ansible',
+            'fi'
+        ]),
         'script': [
             'ansible-galaxy-local-deps-write',
             ' '.join([
