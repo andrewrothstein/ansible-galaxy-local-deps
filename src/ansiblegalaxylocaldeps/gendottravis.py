@@ -32,7 +32,28 @@ def dump_requirements_txt(
         ])
     dump.dump_requirements_txt(role_dir, requirements_txt)
 
+def build_script_yml(role_dir: str):
+    syml = slurp.slurp_script_yml(role_dir)
+    if syml:
+        return syml
+    else:
+        return [
+            'ansible-galaxy-local-deps-write',
+            ' '.join([
+                'dcb',
+                '--upstreamgroup andrewrothstein',
+                '--upstreamapp docker-ansible-role',
+                '--pullall',
+                '--writeall',
+                '--buildall',
+                '--pushall',
+                '--alltags ${OS}'
+                ])
+            ]
+
+
 def from_dcb_os_yml(
+        role_dir: str,
         osl: List[str],
         python_ver: str
 ):
@@ -57,19 +78,7 @@ def from_dcb_os_yml(
             '  pip install ansible',
             'fi'
         ]),
-        'script': [
-            'ansible-galaxy-local-deps-write',
-            ' '.join([
-                'dcb',
-                '--upstreamgroup andrewrothstein',
-                '--upstreamapp docker-ansible-role',
-                '--alltags ${OS}',
-                '--pullall',
-                '--writeall',
-                '--buildall',
-                '--pushall'
-                ])
-            ]
+        'script': build_script_yml(role_dir)
     }
 
 
@@ -80,7 +89,7 @@ def from_dcb_os(
         ansiblegalaxylocaldeps_ver: str
 ):
     osl = slurp.slurp_dcb_os_yml(role_dir)
-    dtt = from_dcb_os_yml(osl, python_ver) if osl is not None else None
+    dtt = from_dcb_os_yml(role_dir, osl, python_ver) if osl is not None else None
     if dtt is not None:
         dump.dump_dottravis_yml(role_dir, dtt)
         dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)

@@ -25,3 +25,6 @@ def slurp_dottravis(role_dir: str):
 
 def slurp_dcb_os_yml(role_dir: str):
     return slurp(role_dir, 'dcb-os.yml')
+
+def slurp_script_yml(role_dir: str):
+    return slurp(role_dir, 'script.yml')
