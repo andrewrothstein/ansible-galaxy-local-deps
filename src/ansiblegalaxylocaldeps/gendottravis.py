@@ -53,7 +53,7 @@ def build_script_yml(role_dir: str):
 
 
 def from_dcb_os_yml(
-        role_dir: str,
+        script_yml: str,
         osl: List[str],
         python_ver: str
 ):
@@ -78,7 +78,7 @@ def from_dcb_os_yml(
             '  pip install ansible',
             'fi'
         ]),
-        'script': build_script_yml(role_dir)
+        'script': script_yml
     }
 
 
@@ -89,7 +89,8 @@ def from_dcb_os(
         ansiblegalaxylocaldeps_ver: str
 ):
     osl = slurp.slurp_dcb_os_yml(role_dir)
-    dtt = from_dcb_os_yml(role_dir, osl, python_ver) if osl is not None else None
+    script_yml = build_script_yml(role_dir)
+    dtt = from_dcb_os_yml(script_yml, osl, python_ver) if osl is not None else None
     if dtt is not None:
         dump.dump_dottravis_yml(role_dir, dtt)
         dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)

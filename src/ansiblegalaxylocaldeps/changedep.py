@@ -8,11 +8,13 @@ import ansiblegalaxylocaldeps.dump as dump
 import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
 import ansiblegalaxylocaldeps.slurp as slurp
 
-def fmt_role(r: str, v: str):
+def adjust_role(role_map, r: str, v: str):
   if v is None:
-    return {'role': r}
+    role_map['role'] = r
   else:
-    return {'role': r, 'version': v}
+    role_map['role'] = r
+    role_map['version'] = v
+  return role_map
 
 def run(role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str) -> None:
   mm = slurp.slurp_meta_main(role_dir)
@@ -24,10 +26,10 @@ def run(role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str)
       for r in y:
         if 'role' in r and from_role == r['role']:
           if from_ver is None:
-            o.append(fmt_role(to_role, to_ver))
+            o.append(adjust_role(r, to_role, to_ver))
             modified = True
           elif 'version' in r and r['version'] == from_ver:
-            o.append(fmt_role(to_role, to_ver))
+            o.append(adjust_role(r, to_role, to_ver))
             modified = True
           else:
             o.append(r)

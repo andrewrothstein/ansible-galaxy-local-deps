@@ -19,12 +19,11 @@ def extract_dependencies(y):
     for d in y['dependencies']:
       key = effkey(d)
       if key:
-        r = d[key]
-        if 'version' in d:
-          o.append({'role' : r, 'version' : d['version']})
-        else:
-          o.append({'role' : r})
+        d['role'] = d[key]
+        if key != 'role':
+          d.pop(key)
+        o.append(d)
       else:
-        log.warn('ignoring key: {0}'.format(d))
+        log.warn('ignoring dependency: {0}'.format(d))
   return o
 
