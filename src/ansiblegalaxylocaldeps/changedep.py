@@ -8,7 +8,10 @@ import ansiblegalaxylocaldeps.dump as dump
 import ansiblegalaxylocaldeps.loggingsetup as loggingsetup
 import ansiblegalaxylocaldeps.slurp as slurp
 
-def adjust_role(role_map, r: str, v: str):
+def adjust_role(role_map, ek: str, r: str, v: str):
+  if ek != 'role':
+    role_map['role'] = role_map[ek]
+    role_map.pop(ek)
   if v is None:
     role_map['role'] = r
   else:
@@ -26,12 +29,13 @@ def rewrite_deps(
   modified = False
   o = []
   for r in d_yml:
-    if 'role' in r and from_role == r['role']:
+    ek = deps.effkey(r)
+    if ek is not None and from_role == r[ek]:
       if from_ver is None:
-        o.append(adjust_role(r, to_role, to_ver))
+        o.append(adjust_role(r, ek, to_role, to_ver))
         modified = True
       elif 'version' in r and r['version'] == from_ver:
-        o.append(adjust_role(r, to_role, to_ver))
+        o.append(adjust_role(r, ek, to_role, to_ver))
         modified = True
       else:
         o.append(r)
