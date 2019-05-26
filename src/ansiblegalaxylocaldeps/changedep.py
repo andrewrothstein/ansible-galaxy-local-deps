@@ -16,29 +16,92 @@ def adjust_role(role_map, r: str, v: str):
     role_map['version'] = v
   return role_map
 
-def run(role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str) -> None:
+def rewrite_deps(
+    d_yml,
+    from_role: str,
+    from_ver: str,
+    to_role: str,
+    to_ver: str
+):
+  modified = False
+  o = []
+  for r in d_yml:
+    if 'role' in r and from_role == r['role']:
+      if from_ver is None:
+        o.append(adjust_role(r, to_role, to_ver))
+        modified = True
+      elif 'version' in r and r['version'] == from_ver:
+        o.append(adjust_role(r, to_role, to_ver))
+        modified = True
+      else:
+        o.append(r)
+    else:
+      o.append(r)
+  return o if modified else None
+
+def rewrite_meta_main(
+    role_dir: str,
+    from_role: str,
+    from_ver: str,
+    to_role: str,
+    to_ver: str
+):
   mm = slurp.slurp_meta_main(role_dir)
   if mm is not None:
     o = []
     y = deps.extract_dependencies(mm)
     if y is not None:
-      modified = False
-      for r in y:
-        if 'role' in r and from_role == r['role']:
-          if from_ver is None:
-            o.append(adjust_role(r, to_role, to_ver))
-            modified = True
-          elif 'version' in r and r['version'] == from_ver:
-            o.append(adjust_role(r, to_role, to_ver))
-            modified = True
-          else:
-            o.append(r)
-        else:
-          o.append(r)
+      modified = rewrite_deps(
+        y,
+        from_role,
+        from_ver,
+        to_role,
+        to_ver
+      )
       if modified:
-        mm['dependencies'] = o
+        mm['dependencies'] = modified
         dump.dump_meta_main(role_dir, mm)
 
+def rewrite_test_requirements_yml(
+    role_dir: str,
+    from_role: str,
+    from_ver: str,
+    to_role: str,
+    to_ver: str
+):
+  tr = slurp.slurp_test_requirements_yml(role_dir)
+  if tr:
+    mtr = rewrite_deps(
+      tr,
+      from_role,
+      from_ver,
+      to_role,
+      to_ver
+    )
+    if mtr:
+      dump.dump_test_requirements_yml(role_dir, mtr)
+
+def run(
+    role_dir: str,
+    from_role: str,
+    from_ver: str,
+    to_role: str,
+    to_ver: str
+) -> None:
+  rewrite_meta_main(
+    role_dir,
+    from_role,
+    from_ver,
+    to_role,
+    to_ver
+  )
+  rewrite_test_requirements_yml(
+    role_dir,
+    from_role,
+    from_ver,
+    to_role,
+    to_ver
+  )
 
 def main() -> None:
   loggingsetup.go()

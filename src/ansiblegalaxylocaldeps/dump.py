@@ -36,3 +36,6 @@ def dump_requirements_txt(role_dir: str, t: str) -> None:
 
 def dump_dcb_os_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, 'dcb-os.yml', y)
+
+def dump_test_requirements_yml(role_dir: str, y) -> None:
+    dump_yml(role_dir, 'test-requirements.yml')

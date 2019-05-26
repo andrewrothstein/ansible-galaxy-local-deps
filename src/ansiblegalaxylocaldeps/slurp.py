@@ -28,3 +28,6 @@ def slurp_dcb_os_yml(role_dir: str):
 
 def slurp_script_yml(role_dir: str):
     return slurp(role_dir, 'script.yml')
+
+def slurp_test_requirements_yml(role_dir: str):
+    return slurp(role_dir, 'test-requirements.yml')
