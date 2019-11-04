@@ -15,7 +15,7 @@ def run(role_dir: str, ifcontainsrole: str, todrop: str) -> None:
   if droles is not None:
     for role in droles:
       role_name = role['role']
-      if role_name == ifcontainsrole:
+      if ifcontainsrole is None or role_name == ifcontainsrole:
         osl = slurp.slurp_dcb_os_yml(role_dir)
         if osl is not None:
           new_osl = []
