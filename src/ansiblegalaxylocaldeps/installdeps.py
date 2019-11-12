@@ -12,7 +12,7 @@ def install(r: str, v: str=None) -> None:
     log = logging.getLogger('ansible-galaxy-local-deps.installdeps.install')
     log.info('installing {0} version {1}...'.format(r, v))
     p = ','.join([r, v]) if v is not None else r
-    check_call(['ansible-galaxy', '-f', 'install', p])
+    check_call(['ansible-galaxy', 'install', '-f', p])
 
 def run(role_dir: str) -> None:
     log = logging.getLogger('ansible-galaxy-local-deps.installdeps.run')
