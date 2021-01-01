@@ -55,10 +55,11 @@ def build_script_yml(role_dir: str):
 def from_dcb_os_yml(
         script_yml: str,
         osl: List[str],
+        ci_dist: str,
         python_ver: str
 ):
     return {
-        'dist': 'xenial',
+        'dist': ci_dist,
         'sudo': 'required',
         'services': ['docker'],
         'language': 'python',
@@ -84,19 +85,26 @@ def from_dcb_os_yml(
 
 def from_dcb_os(
         role_dir: str,
+        ci_dist: str,
         python_ver: str,
         dcb_ver: str,
         ansiblegalaxylocaldeps_ver: str
 ):
     osl = slurp.slurp_dcb_os_yml(role_dir)
     script_yml = build_script_yml(role_dir)
-    dtt = from_dcb_os_yml(script_yml, osl, python_ver) if osl is not None else None
+    dtt = from_dcb_os_yml(
+        script_yml,
+        osl,
+        ci_dist,
+        python_ver
+    ) if osl is not None else None
     if dtt is not None:
         dump.dump_dottravis_yml(role_dir, dtt)
         dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
 
 def from_dottravis(
         role_dir: str,
+        ci_dist: str,
         python_ver: str,
         dcb_ver: str,
         ansiblegalaxylocaldeps_ver: str
@@ -105,6 +113,7 @@ def from_dottravis(
     osl = extract_osl_from_dottravis(dtt) if dtt is not None else None
     if osl is not None:
         dtt['env'] = fmt_osl(osl)
+        dtt['dist'] = ci_dist
         dtt['python'] = python_ver
         dump.dump_dottravis_yml(role_dir, dtt)
         dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
@@ -117,6 +126,7 @@ def main():
     )
     log = logging.getLogger('ansible-galaxy-local-deps.gendottravis.main')
     parser.add_argument('roledirs', nargs='*', default=['.'])
+    parser.add_argument('-c', '--cidist', default='focal')
     parser.add_argument('-p', '--pythonver', default='3.9')
     parser.add_argument('-d', '--dcbver', default='0.0.17')
     parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.0.14')
@@ -124,9 +134,20 @@ def main():
     args = parser.parse_args()
     for role_dir in args.roledirs:
         if args.action == 'from_dcb_os':
-            from_dcb_os(role_dir, args.pythonver, args.dcbver, args.ansiblegalaxylocaldepsver)
+            from_dcb_os(
+                role_dir,
+                args.cidist,
+                args.pythonver,
+                args.dcbver,
+                args.ansiblegalaxylocaldepsver
+            )
         elif args.action == 'from_dottravis':
-            from_dottravis(role_dir, args.pythonver, args.dcbver, args.ansiblegalaxylocaldepsver)
+            from_dottravis(
+                role_dir,
+                args.cidist,
+                args.pythonver,
+                args.dcbver,
+                args.ansiblegalaxylocaldepsver
+            )
         else:
             log.warning('unknown action: {}'.format(args.action))
-
