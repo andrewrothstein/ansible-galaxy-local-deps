@@ -21,9 +21,11 @@ env:
 
     def test_from_dcb_os_yml(self):
         osl = ['xyz', 'abc']
+        ci_dist = "bionic"
         python_ver = '1.2.3.4'
         script_yml = ['run-cmd-1', 'run-cmd-2']
-        r = from_dcb_os_yml(script_yml, osl, python_ver)
+        r = from_dcb_os_yml(script_yml, osl, ci_dist, python_ver)
+        self.assertEqual(r['dist'], ci_dist)
         self.assertEqual(r['python'], python_ver)
         self.assertEqual(len(r['env']), 2)
         self.assertEqual(r['env'][0], 'OS=abc')
