@@ -128,8 +128,8 @@ def main():
     parser.add_argument('roledirs', nargs='*', default=['.'])
     parser.add_argument('-c', '--cidist', default='focal')
     parser.add_argument('-p', '--pythonver', default='3.9')
-    parser.add_argument('-d', '--dcbver', default='0.0.17')
-    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.0.14')
+    parser.add_argument('-d', '--dcbver', default='0.0.19')
+    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.0.20')
     parser.add_argument('-a', '--action', default='from_dottravis')
     args = parser.parse_args()
     for role_dir in args.roledirs:
