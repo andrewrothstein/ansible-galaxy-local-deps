@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(name='ansible-galaxy-local-deps',
-      version='0.0.20',
-      description='CLI for building, tagging, and publishing Docker containers',
+      version='0.1.0',
+      description='CLI for interacting with Ansible roles and their CIs',
       url='http://github.com/andrewrothstein/ansible-galaxy-local-deps',
       author='Andrew Rothstein',
       author_email='andrew.rothstein@gmail.com',
@@ -11,7 +11,9 @@ setup(name='ansible-galaxy-local-deps',
       package_dir={'': 'src'},
       python_requires='>=3.5',
       install_requires=['PyYAML'],
-      tests_require=['nose2'],
+      extras_require={
+          "test": ['nose2']
+      },
       zip_safe=False,
       entry_points={
         'console_scripts': [
