@@ -31,3 +31,6 @@ def slurp_script_yml(role_dir: str):
 
 def slurp_test_requirements_yml(role_dir: str):
     return slurp(role_dir, 'test-requirements.yml')
+
+def slurp_gha_buildyml(role_dir: str):
+    return slurp(role_dir, os.path.join(".github", "workflows", "build.yml"))
