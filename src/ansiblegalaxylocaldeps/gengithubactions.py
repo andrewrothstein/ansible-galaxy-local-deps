@@ -20,7 +20,10 @@ def dump_requirements_txt(
         ])
     )
 
-def build_steps(role_dir: str):
+def build_steps(
+    role_dir: str,
+    registry: str = 'ghcr.io'
+    ):
     syml = slurp.slurp_script_yml(role_dir)
     if syml:
         return syml
@@ -28,14 +31,14 @@ def build_steps(role_dir: str):
         return [
             {
                 'name': 'dcb #ftw',
-                'env': {
-                    'DCB_TARGET_QUAY_IO_USER': '${{ secrets.DCB_TARGET_QUAY_IO_USER }}',
-                    'DCB_TARGET_QUAY_IO_PWD': '${{ secrets.DCB_TARGET_QUAY_IO_PWD }}',
-                },
                 'run' : ' '.join([
                     'dcb',
+                    '--targetregistry', registry,
                     '--upstreamgroup andrewrothstein',
                     '--upstreamapp docker-ansible',
+                    '--targetregistry', registry,
+                    '--targetuser', '${{ github.actor }}',
+                    '--targetpwd', '${{ github.token }}',
                     '--snippet from.j2 ansible-test-role.j2',
                     '--pullall',
                     '--writeall',
