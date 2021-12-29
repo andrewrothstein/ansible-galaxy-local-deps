@@ -45,3 +45,15 @@ def dump_test_requirements_yml(role_dir: str, y) -> None:
 
 def dump_github_actions_build_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, os.path.join('.github', 'workflows', 'build.yml'), y)
+
+def dump_gitignore(role_dir: str):
+    dump_txt(
+        role_dir,
+        ".gitignore",
+        "\n".join([
+            '**~'
+            '*.retry',
+            'Dockerfile.*',
+            'requirements.yml',
+            '!meta/requirements.yml'
+        ]))

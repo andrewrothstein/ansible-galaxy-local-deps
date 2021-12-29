@@ -113,6 +113,7 @@ def from_dcb_os(
     if build_yml is not None:
         dump.dump_github_actions_build_yml(role_dir, build_yml)
         dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
+        dump.dump_gitignore(role_dir)
 
 def mksubdirs(role_dir: str, subs: List[str]):
     d = role_dir
