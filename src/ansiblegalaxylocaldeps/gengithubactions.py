@@ -9,13 +9,11 @@ import ansiblegalaxylocaldeps.slurp as slurp
 
 def dump_requirements_txt(
         role_dir: str,
-        dcb_ver: str,
-        ansiblegalaxylocaldeps_ver: str
+        dcb_ver: str
 ):
     dump.dump_requirements_txt(
         role_dir,
         '\n'.join([
-            'ansible-galaxy-local-deps == {}'.format(ansiblegalaxylocaldeps_ver),
             'dcb == {}'.format(dcb_ver)
         ])
     )
@@ -84,10 +82,6 @@ def from_dcb_os_yml(
                             'python -m pip install --upgrade pip',
                             'if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi'
                         ])
-                    },
-                    {
-                        'name': 'Generate requirements.yml',
-                        'run': 'ansible-galaxy-local-deps-write'
                     }
                 ] + steps
             }
@@ -98,8 +92,7 @@ def from_dcb_os(
         role_dir: str,
         ci_dist: str,
         python_ver: str,
-        dcb_ver: str,
-        ansiblegalaxylocaldeps_ver: str
+        dcb_ver: str
 ):
     osl = slurp.slurp_dcb_os_yml(role_dir)
     steps = build_steps(role_dir)
@@ -112,7 +105,7 @@ def from_dcb_os(
 
     if build_yml is not None:
         dump.dump_github_actions_build_yml(role_dir, build_yml)
-        dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
+        dump_requirements_txt(role_dir, dcb_ver)
         dump.dump_gitignore(role_dir)
 
 def mksubdirs(role_dir: str, subs: List[str]):
@@ -132,7 +125,6 @@ def main():
     parser.add_argument('-c', '--cidist', default='ubuntu-latest')
     parser.add_argument('-p', '--pythonver', default='3.9')
     parser.add_argument('-d', '--dcbver', default='0.1.2')
-    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.1.3')
     args = parser.parse_args()
     for role_dir in args.roledirs:
         mksubdirs(role_dir, [".github", "workflows"])
@@ -140,6 +132,5 @@ def main():
             role_dir,
             args.cidist,
             args.pythonver,
-            args.dcbver,
-            args.ansiblegalaxylocaldepsver
+            args.dcbver
         )
