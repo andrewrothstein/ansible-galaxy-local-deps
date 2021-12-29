@@ -33,7 +33,7 @@ def build_steps(
                 'name': 'dcb #ftw',
                 'run' : ' '.join([
                     'dcb',
-                    '--targetregistry', registry,
+                    '--upstreamregistry', registry,
                     '--upstreamgroup andrewrothstein',
                     '--upstreamapp docker-ansible',
                     '--targetregistry', registry,
@@ -113,6 +113,7 @@ def from_dcb_os(
     if build_yml is not None:
         dump.dump_github_actions_build_yml(role_dir, build_yml)
         dump_requirements_txt(role_dir, dcb_ver, ansiblegalaxylocaldeps_ver)
+        dump.dump_gitignore(role_dir)
 
 def mksubdirs(role_dir: str, subs: List[str]):
     d = role_dir
@@ -130,8 +131,8 @@ def main():
     parser.add_argument('roledirs', nargs='*', default=['.'])
     parser.add_argument('-c', '--cidist', default='ubuntu-latest')
     parser.add_argument('-p', '--pythonver', default='3.9')
-    parser.add_argument('-d', '--dcbver', default='0.1.0')
-    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.1.0')
+    parser.add_argument('-d', '--dcbver', default='0.1.2')
+    parser.add_argument('-l', '--ansiblegalaxylocaldepsver', default='0.1.3')
     args = parser.parse_args()
     for role_dir in args.roledirs:
         mksubdirs(role_dir, [".github", "workflows"])
