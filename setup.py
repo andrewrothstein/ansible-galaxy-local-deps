@@ -1,4 +1,7 @@
 from setuptools import setup, find_packages
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(name='ansible-galaxy-local-deps',
       version='0.2.1',
@@ -14,6 +17,8 @@ setup(name='ansible-galaxy-local-deps',
       extras_require={
           "test": ['nose2']
       },
+      long_description=long_description,
+      long_description_content_type='text/markdown',
       zip_safe=False,
       entry_points={
         'console_scripts': [
