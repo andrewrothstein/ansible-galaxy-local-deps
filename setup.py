@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='ansible-galaxy-local-deps',
-      version='0.2.0',
+      version='0.2.1',
       description='CLI for interacting with Ansible roles and their CIs',
       url='http://github.com/andrewrothstein/ansible-galaxy-local-deps',
       author='Andrew Rothstein',

@@ -55,5 +55,6 @@ def dump_gitignore(role_dir: str):
             '*.retry',
             'Dockerfile.*',
             'requirements.yml',
-            '!meta/requirements.yml'
+            '!meta/requirements.yml',
+            '**/*undo-tree*'
         ]))
