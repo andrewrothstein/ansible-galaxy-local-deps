@@ -62,16 +62,16 @@ def from_dcb_os_yml(
                 'strategy': {
                     'matrix': {
                         'os': osl,
-                        'python-versions': [python_ver]
+                        'python-version': [python_ver]
                     }
                 },
                 'steps': [
                     {
-                        'uses': 'actions/checkout@v2'
+                        'uses': 'actions/checkout@v3'
                     },
                     {
                         'name': 'Set up Python ${{ matrix.python-version }}',
-                        'uses': 'actions/setup-python@v2',
+                        'uses': 'actions/setup-python@v4',
                         'with': {
                             'python-version': '${{ matrix.python-version }}'
                         }
@@ -123,7 +123,7 @@ def main():
     log = logging.getLogger('ansible-galaxy-local-deps.gengithubactions.main')
     parser.add_argument('roledirs', nargs='*', default=['.'])
     parser.add_argument('-c', '--cidist', default='ubuntu-latest')
-    parser.add_argument('-p', '--pythonver', default='3.9')
+    parser.add_argument('-p', '--pythonver', default='3.10')
     parser.add_argument('-d', '--dcbver', default='0.1.2')
     args = parser.parse_args()
     for role_dir in args.roledirs:
