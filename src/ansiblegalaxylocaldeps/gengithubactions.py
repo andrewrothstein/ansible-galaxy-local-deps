@@ -73,6 +73,7 @@ def from_dcb_os_yml(
                         'name': 'Set up Python ${{ matrix.python-version }}',
                         'uses': 'actions/setup-python@v4',
                         'with': {
+                            'cache': 'pip',
                             'python-version': '${{ matrix.python-version }}'
                         }
                     },
