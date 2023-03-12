@@ -12,17 +12,19 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-      - name: upgrade pip
-        run: python -m pip install --upgrade pip
-      - name: install with test deps
-        run: python -m pip install .[test]
-      - name: run unit tests
-        run: python -m unittest discover
-      - name: build a binary wheel and a source tarball
-        run: |
-          python -m pip install build wheel
-          python -m build --sdist --wheel --outdir dist/
+          python-version: '3.11'
+      - name: install task
+        uses: arduino/setup-task@v1
+      - name: task ver
+        run: task --version
+      - name: download task mono
+        uses: actions/checkout@v2
+        with:
+          repository: andrewrothstein/tasks
+          ref: develop
+          path: taskmono
+      - name: 'task #ftw'
+        run: task -t taskmono/python-test.yml
       - name: deploy to test.pypi.org
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
