@@ -21,7 +21,7 @@ def build_steps(
                 'run': " ".join([
                     'task',
                     '-t taskmono/ansible-test-role.yml',
-                    '"targetuser=${{ matrix.os}}"',
+                    '"targetuser=${{ github.actor }}"',
                     '"targetpwd=${{ github.token }}"',
                     '"alltags=${{ matrix.os }}"'
                 ])
