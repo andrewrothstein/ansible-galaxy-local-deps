@@ -60,7 +60,10 @@ def from_dcb_os_yml(
                     },
                     {
                         'name': 'install task',
-                        'uses': 'arduino/setup-task@v1'
+                        'uses': 'arduino/setup-task@v1',
+                        'with': {
+                            'repo-token': '${{ github.token }}'
+                        }
                     },
                     {
                         'name': 'task ver',
