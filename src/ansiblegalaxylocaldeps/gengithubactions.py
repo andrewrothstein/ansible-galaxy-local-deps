@@ -71,7 +71,7 @@ def from_dcb_os_yml(
                     },
                     {
                         'name': 'download task mono',
-                        'uses': 'actions/checkout@v2',
+                        'uses': 'actions/checkout@v3',
                         'with': {
                             'repository': 'andrewrothstein/tasks',
                             'ref': 'develop',

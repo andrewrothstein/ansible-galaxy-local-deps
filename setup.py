@@ -4,7 +4,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(name='ansible-galaxy-local-deps',
-      version='0.3.0',
+      version='0.3.1',
       description='CLI for interacting with Ansible roles and their CIs',
       url='http://github.com/andrewrothstein/ansible-galaxy-local-deps',
       author='Andrew Rothstein',
