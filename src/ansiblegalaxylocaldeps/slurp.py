@@ -20,9 +20,6 @@ def slurp(role_dir: str, f: str):
 def slurp_meta_main(role_dir: str):
     return slurp(role_dir, os.path.join('meta', 'main.yml'))
 
-def slurp_dottravis(role_dir: str):
-    return slurp(role_dir, '.travis.yml')
-
 def slurp_dcb_os_yml(role_dir: str):
     return slurp(role_dir, 'dcb-os.yml')
 

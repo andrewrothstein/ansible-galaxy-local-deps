@@ -24,7 +24,6 @@ setup(name='ansible-galaxy-local-deps',
         'console_scripts': [
             'ansible-galaxy-local-deps-install=ansiblegalaxylocaldeps.installdeps:main',
             'ansible-galaxy-local-deps-write=ansiblegalaxylocaldeps.writedeps:main',
-            'gendottravis=ansiblegalaxylocaldeps.gendottravis:main',
             'gengithubactions=ansiblegalaxylocaldeps.gengithubactions:main',
             'ansible-galaxy-local-deps-change-dep=ansiblegalaxylocaldeps.changedep:main',
             'ansible-galaxy-local-deps-add-os=ansiblegalaxylocaldeps.addos:main',
