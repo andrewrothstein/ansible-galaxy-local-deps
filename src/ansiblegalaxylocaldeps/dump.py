@@ -33,7 +33,7 @@ def dump_json(role_dir: str, f: str, j) -> None:
     with open(of, 'w') as s:
         json.dump(j, s, indent=2)
 
-def dump_meta_main(role_dir: str, y) -> None:
+def dump_meta_main_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, os.path.join('meta', 'main.yml'), y)
 
 def dump_requirements_yml(role_dir: str, y) -> None:
@@ -48,7 +48,7 @@ def dump_requirements_txt(role_dir: str, t: str) -> None:
 def dump_dcb_os_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, 'dcb-os.yml', y)
 
-def dump_platform_matrix(role_dir: str, j) -> None:
+def dump_platform_matrix_json(role_dir: str, j) -> None:
     dump_json(role_dir, 'platform-matrix-v1.json', j)
 
 def dump_test_requirements_yml(role_dir: str, y) -> None:
