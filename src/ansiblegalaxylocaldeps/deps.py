@@ -19,12 +19,12 @@ def extract_dependencies(y):
   log = logging.getLogger('ansible-galaxy-local-deps.deps.extract_dependencies')
   o = []
   for r in y:
-    key = effkey(d)
+    key = effkey(r)
     if key:
-      d['name'] = d[key]
-        if key != 'name':
-          d.pop(key)
-        o.append(d)
-      else:
-        log.warn('ignoring dependency: {0}'.format(d))
+      r['name'] = r[key]
+      if key != 'name':
+        r.pop(key)
+      o.append(r)
+    else:
+      log.warn('ignoring dependency: {0}'.format(r))
   return o

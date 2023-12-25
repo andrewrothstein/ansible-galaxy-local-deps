@@ -27,7 +27,7 @@ class TestDeps(TestCase):
         self.assertEqual(len(o), 3, 'count of simple extract_dependencies')
         self.assertEqual(o[0]['name'], 'test-role-1', 'simple extracted role name (role)')
         self.assertEqual(o[1]['name'], 'test-role-2', 'simple extracted role name (src)')
-        self.assertEqual(o[1]['name'], 'test-role-3', 'simple extracted role name (name)')
+        self.assertEqual(o[2]['name'], 'test-role-3', 'simple extracted role name (name)')
 
 
     def test_extract_dependencies_with_version(self):
