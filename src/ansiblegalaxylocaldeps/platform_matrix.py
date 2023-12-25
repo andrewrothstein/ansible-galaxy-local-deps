@@ -1,39 +1,30 @@
 import logging
 import json
 
+latest_pairs = {
+    "alpine": set(["3.18", "3.19"]),
+    "debian": set(["bookworm", "bullseye"]),
+    "fedora": set(["38", "39"]),
+    "rockylinux": set(["8", "9"]),
+    "ubuntu": set(["focal", "jammy"])
+}
+
 upgrades = {
     "alpine": {
-        "3.15": ["3.18", "3.19"],
-        "3.16": ["3.18", "3.19"],
-        "3.17": ["3.18", "3.19"],
-        "3.18": ["3.18","3.19"],
-        "3.19": ["3.19"],
-        "edge": ["edge"]
+        "3.19": set(["3.19"]),
+        "edge": set(["edge"])
     },
     "debian": {
-        "jessie": ["bookworm", "bullseye"],
-        "buster": ["bookworm", "bullseye"],
-        "bullseye": ["bookworm", "bullseye"],
-        "bookworm": ["bookworm"]
+        "bookworm": set(["bookworm"])
     },
     "fedora": {
-        "34": ["38", "39"],
-        "35": ["38", "39"],
-        "36": ["38", "39"],
-        "37": ["38", "39"],
-        "38": ["38", "39"],
-        "39": ["39"]
+        "39": set(["39"])
     },
     "rockylinux": {
-        "8": ["8", "9"],
-        "9": ["9"]
+        "9": set(["9"])
     },
     "ubuntu": {
-        "trusty": ["focal", "jammy"],
-        "xenial": ["focal", "jammy"],
-        "bionic": ["focal", "jammy"],
-        "focal": ["focal", "jammy"],
-        "jammy": ["jammy"]
+        "jammy": set(["jammy"])
     }
 }
 
@@ -42,14 +33,19 @@ def upgrade(pm_in):
     # apply upgrades and flatten to set
     for p in pm_in:
         os = p["OS"]
-        os_ver = p["OS_VER"]
-        if os not in by_os.keys():
-            by_os[os] = set()
+        bo = by_os.setdefault(os, set())
 
-        if os not in upgrades.keys():
-            by_os[os].add(os_ver)
+        os_ver = p["OS_VER"]
+
+        if os in upgrades.keys():
+            ups = upgrades[os]
+            if os_ver in ups:
+                bo |= ups[os_ver]
+            else:
+                bo |= latest_pairs[os]
         else:
-            by_os[os] = by_os[os].union(upgrades[os][os_ver])
+            bo |= set([os_ver])
+
 
     pm_out = []
     # reinflate sets
