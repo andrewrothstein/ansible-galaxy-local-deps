@@ -14,11 +14,11 @@ def effkey(d) -> Union[str, None]:
   else:
     return None
 
-def extract_dependencies(y):
+def extract_dependencies(requirements_yml):
   """extract dependencies from a requirements.yml yaml data"""
   log = logging.getLogger('ansible-galaxy-local-deps.deps.extract_dependencies')
   o = []
-  for r in y:
+  for r in requirements_yml:
     key = effkey(r)
     if key:
       r['name'] = r[key]

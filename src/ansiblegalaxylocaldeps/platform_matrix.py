@@ -1,30 +1,42 @@
 import logging
 import json
 
+galaxy_anys = {'alpine', 'archlinux'}
+
+galaxy_os_name = {
+    "alpine": "Alpine",
+    "archlinux": "ArchLinux",
+    "debian": "Debian",
+    "fedora": "Fedora",
+    "rockylinux": "EL",
+    "ubuntu": "Ubuntu"
+}
+
 latest_pairs = {
-    "alpine": set(["3.18", "3.19"]),
-    "debian": set(["bookworm", "bullseye"]),
-    "fedora": set(["38", "39"]),
-    "rockylinux": set(["8", "9"]),
-    "ubuntu": set(["focal", "jammy"])
+    "alpine": {"3.18", "3.19"},
+    "archlinux": {"latest"},
+    "debian": {"bookworm", "bullseye"},
+    "fedora": {"38", "39"},
+    "rockylinux": {"8", "9"},
+    "ubuntu": {"focal", "jammy"}
 }
 
 upgrades = {
     "alpine": {
-        "3.19": set(["3.19"]),
-        "edge": set(["edge"])
+        "3.19": {"3.19"},
+        "edge": {"edge"}
     },
     "debian": {
-        "bookworm": set(["bookworm"])
+        "bookworm": {"bookworm"}
     },
     "fedora": {
-        "39": set(["39"])
+        "39": {"39"}
     },
     "rockylinux": {
-        "9": set(["9"])
+        "9": {"9"}
     },
     "ubuntu": {
-        "jammy": set(["jammy"])
+        "jammy": {"jammy"}
     }
 }
 
@@ -44,7 +56,7 @@ def upgrade(pm_in):
             else:
                 bo |= latest_pairs[os]
         else:
-            bo |= set([os_ver])
+            bo |= {os_ver}
 
 
     pm_out = []
@@ -60,3 +72,23 @@ def from_dcb_osl(osl):
         s = o.split('_')
         pm.append({"OS": s[0], "OS_VER" : s[1]})
     return upgrade(pm)
+
+def render_platforms(pm):
+    by_os = {}
+    for p in pm:
+        os = p['OS']
+        os_name = galaxy_os_name[os]
+        bo = by_os.setdefault(os_name, set())
+        if os in galaxy_anys:
+            bo |= {"any"}
+        else:
+            bo |= {p["OS_VER"]}
+
+    # reinflate sets
+    platforms = []
+    for os_name in sorted(by_os.keys()):
+        platforms.append({
+            "name": os_name,
+            "versions": sorted(by_os[os_name])
+        })
+    return platforms

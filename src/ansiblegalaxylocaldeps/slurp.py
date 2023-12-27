@@ -33,14 +33,20 @@ def slurp_meta_main_yml(role_dir: str):
         os.path.join('meta', 'main.yml')
     )
 
+def slurp_meta_requirements_yml(role_dir: str):
+    return slurp_yml(
+        role_dir,
+        os.path.join('meta', 'requirements.yml')
+    )
+
+def slurp_test_requirements_yml(role_dir: str):
+    return slurp_yml(role_dir, 'test-requirements.yml')
+
 def slurp_dcb_os_yml(role_dir: str):
     return slurp_yml(role_dir, 'dcb-os.yml')
 
 def slurp_script_yml(role_dir: str):
     return slurp_yml(role_dir, 'script.yml')
-
-def slurp_test_requirements_yml(role_dir: str):
-    return slurp_yml(role_dir, 'test-requirements.yml')
 
 def slurp_platform_matrix_json(role_dir: str):
     return slurp_json(role_dir, 'platform-matrix-v1.json')

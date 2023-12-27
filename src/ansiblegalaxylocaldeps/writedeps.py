@@ -10,14 +10,17 @@ import ansiblegalaxylocaldeps.slurp as slurp
 
 def run(role_dir: str) -> None:
   mm = slurp.slurp_meta_main(role_dir)
-  y = deps.extract_dependencies(mm)
-  dump.dump_requirements_yml(role_dir, y)
+  if 'dependencies' in mm:
+    dump.dump_requirements_yml(
+      role_dir,
+      deps.extract_dependencies(mm['dependencies'])
+    )
 
 def main() -> None:
   loggingsetup.go()
 
   parser = argparse.ArgumentParser(
-    description='generates a requirements.yml from an Ansible roles meta/main.yml file'
+    description='extracts dependencies from meta/main.yml and writes out meta/requirements.yml'
   )
   parser.add_argument('roledirs', nargs='*', default=['.'])
   args = parser.parse_args()

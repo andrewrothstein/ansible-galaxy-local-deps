@@ -15,8 +15,5 @@ def find_meta_main(role_dir: str) -> Union[str, None]:
 def find_dcb_os(role_dir: str) -> Union[str, None]:
     return find(role_dir, 'dcb-os.yml')
 
-def find_dottravis(role_dir: str) -> Union[str, None]:
-    return find(role_dir, '.travis.yml')
-
 def find_gha_buildyml(role_dir: str) -> Union[str, None]:
     return find(role_dir, os.path.join(".github", "workflows", "build.yml"))
