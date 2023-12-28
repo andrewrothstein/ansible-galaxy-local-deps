@@ -15,30 +15,34 @@ class TestDeps(TestCase):
         self.assertIsNone(effkey({'foo': 'bar'}), 'EffKey neither src nor role')
 
     def test_extract_dependencies(self):
-        y = load("""---
-dependencies:
-  - role: test-role-1
-  - role: test-role-2
-        """, Loader=Loader)
+        y = load(
+"""
+---
+- role: test-role-1
+- src: test-role-2
+- name: test-role-3
+""",
+                 Loader=Loader)
         o = extract_dependencies(y)
-        self.assertEqual(len(o), 2, 'count of simple extract_dependencies')
-        self.assertEqual(o[0]['role'], 'test-role-1', 'simple extracted role name (1)')
-        self.assertEqual(o[1]['role'], 'test-role-2', 'simple extracted role name (2)')
+        self.assertEqual(len(o), 3, 'count of simple extract_dependencies')
+        self.assertEqual(o[0]['name'], 'test-role-1', 'simple extracted role name (role)')
+        self.assertEqual(o[1]['name'], 'test-role-2', 'simple extracted role name (src)')
+        self.assertEqual(o[2]['name'], 'test-role-3', 'simple extracted role name (name)')
 
 
     def test_extract_dependencies_with_version(self):
-        y = load("""---
-dependencies:
-  - role: test-role-1
-    version: v1.0.0
-  - role: test-role-2
-    version: v2.0.0
-        """, Loader=Loader)
+        y = load(
+"""
+---
+- role: test-role-1
+  version: v1.0.0
+- name: test-role-2
+  version: v2.0.0
+""",
+            Loader=Loader)
         o = extract_dependencies(y)
         self.assertEqual(len(o), 2, 'count of extract_dependencies with versions')
-        self.assertEqual(o[0]['role'], 'test-role-1', 'extracted role name (1)')
+        self.assertEqual(o[0]['name'], 'test-role-1', 'extracted role name (1)')
         self.assertEqual(o[0]['version'], 'v1.0.0', 'extracted role version (1)')
-        self.assertEqual(o[1]['role'], 'test-role-2', 'extracted role name (2))')
+        self.assertEqual(o[1]['name'], 'test-role-2', 'extracted role name (2))')
         self.assertEqual(o[1]['version'], 'v2.0.0', 'extracted role version (2)')
-
-

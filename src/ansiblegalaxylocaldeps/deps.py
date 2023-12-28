@@ -5,25 +5,26 @@ from typing import Union
 import ansiblegalaxylocaldeps.finder as finder
 
 def effkey(d) -> Union[str, None]:
-  if 'role' in d:
+  if 'name' in d:
+    return 'name'
+  elif 'role' in d:
     return 'role'
   elif 'src' in d:
     return 'src'
   else:
     return None
 
-def extract_dependencies(y):
+def extract_dependencies(requirements_yml):
+  """extract dependencies from a requirements.yml yaml data"""
   log = logging.getLogger('ansible-galaxy-local-deps.deps.extract_dependencies')
   o = []
-  if y is not None and 'dependencies' in y:
-    for d in y['dependencies']:
-      key = effkey(d)
-      if key:
-        d['role'] = d[key]
-        if key != 'role':
-          d.pop(key)
-        o.append(d)
-      else:
-        log.warn('ignoring dependency: {0}'.format(d))
+  for r in requirements_yml:
+    key = effkey(r)
+    if key:
+      r['name'] = r[key]
+      if key != 'name':
+        r.pop(key)
+      o.append(r)
+    else:
+      log.warn('ignoring dependency: {0}'.format(r))
   return o
-

@@ -1,0 +1,7 @@
+---
+- name: test-name-1
+- name: test-name-2
+  version: v1.2.3
+- name: test-name-3
+- name: test-name-4
+  version: v2.3.4

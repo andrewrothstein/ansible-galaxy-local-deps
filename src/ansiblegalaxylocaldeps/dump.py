@@ -2,11 +2,11 @@ import logging
 import os
 import sys
 import json
-from yaml import dump as ydump
-try:
-    from yaml import CDumper as Dumper
-except ImportError:
-    from yaml import Dumper
+import yaml
+
+class IndentDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(IndentDumper, self).increase_indent(flow, False)
 
 def dump_txt(role_dir: str, f: str, t: str) -> None:
     log = logging.getLogger('ansible-galaxy-local-deps.dump.dump_txt')
@@ -20,10 +20,11 @@ def dump_yml(role_dir: str, f: str, y) -> None:
     of = os.path.join(role_dir, f)
     log.info('writing out {}...'.format(of))
     with open(of, 'w') as s:
-        ydump(
+        yaml.dump(
             y,
             stream=s,
-            explicit_start=True
+            explicit_start=True,
+            Dumper=IndentDumper
         )
 
 def dump_json(role_dir: str, f: str, j) -> None:
@@ -33,14 +34,14 @@ def dump_json(role_dir: str, f: str, j) -> None:
     with open(of, 'w') as s:
         json.dump(j, s, indent=2)
 
-def dump_meta_main(role_dir: str, y) -> None:
+def dump_meta_main_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, os.path.join('meta', 'main.yml'), y)
+
+def dump_meta_requirements_yml(role_dir: str, y) -> None:
+    dump_yml(role_dir, os.path.join('meta', 'requirements.yml'), y)
 
 def dump_requirements_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, 'requirements.yml', y)
-
-def dump_dottravis_yml(role_dir: str, dott) -> None:
-    dump_yml(role_dir, '.travis.yml', dott)
 
 def dump_requirements_txt(role_dir: str, t: str) -> None:
     dump_txt(role_dir, 'requirements.txt', t)
@@ -48,7 +49,7 @@ def dump_requirements_txt(role_dir: str, t: str) -> None:
 def dump_dcb_os_yml(role_dir: str, y) -> None:
     dump_yml(role_dir, 'dcb-os.yml', y)
 
-def dump_platform_matrix(role_dir: str, j) -> None:
+def dump_platform_matrix_json(role_dir: str, j) -> None:
     dump_json(role_dir, 'platform-matrix-v1.json', j)
 
 def dump_test_requirements_yml(role_dir: str, y) -> None:
