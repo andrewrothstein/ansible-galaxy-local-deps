@@ -1,7 +1,7 @@
 import logging
 import json
 
-galaxy_anys = {'alpine', 'archlinux'}
+galaxy_alls = {'alpine', 'archlinux'}
 
 galaxy_os_name = {
     "alpine": "Alpine",
@@ -79,8 +79,8 @@ def render_platforms(pm):
         os = p['OS']
         os_name = galaxy_os_name[os]
         bo = by_os.setdefault(os_name, set())
-        if os in galaxy_anys:
-            bo |= {"any"}
+        if os in galaxy_alls:
+            bo |= {"all"}
         else:
             bo |= {p["OS_VER"]}
 
