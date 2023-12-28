@@ -2,11 +2,11 @@ import logging
 import os
 import sys
 import json
-from yaml import dump as ydump
-try:
-    from yaml import CDumper as Dumper
-except ImportError:
-    from yaml import Dumper
+import yaml
+
+class IndentDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(IndentDumper, self).increase_indent(flow, False)
 
 def dump_txt(role_dir: str, f: str, t: str) -> None:
     log = logging.getLogger('ansible-galaxy-local-deps.dump.dump_txt')
@@ -20,10 +20,11 @@ def dump_yml(role_dir: str, f: str, y) -> None:
     of = os.path.join(role_dir, f)
     log.info('writing out {}...'.format(of))
     with open(of, 'w') as s:
-        ydump(
+        yaml.dump(
             y,
             stream=s,
-            explicit_start=True
+            explicit_start=True,
+            Dumper=IndentDumper
         )
 
 def dump_json(role_dir: str, f: str, j) -> None:
