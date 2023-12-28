@@ -18,7 +18,8 @@ def build_yml(ver: str="v1"):
         }
     }
 
-def render_meta_main(role_dir, pm):
+def render_meta_main(role_dir: str, pm):
+    log = logging.getLogger('ansible-galaxy-local-deps.gengithubactions.render_meta_main')
     mm = slurp.slurp_meta_main_yml(role_dir)
 
     # flatten the license list
@@ -31,6 +32,15 @@ def render_meta_main(role_dir, pm):
         mm['galaxy_info']['min_ansible_version'] = str(min_ansible_version)
 
     mm['galaxy_info']['platforms'] = platform_matrix.render_platforms(pm)
+
+    if 'role_name' not in mm['galaxy_info']:
+        log.info('computing role_name from role directory: {}'.format(role_dir))
+        d = os.path.basename(role_dir)
+        if d.startswith('ansible-'):
+            rn = d.removeprefix('ansible-')
+            log.info('computed role_name: {}'.format(rn))
+            mm['galaxy_info']['role_name'] = rn
+
     dump.dump_meta_main_yml(role_dir, mm)
 
 def upgrade_platform_matrix(
@@ -63,7 +73,7 @@ def main():
         description='generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake'
     )
     log = logging.getLogger('ansible-galaxy-local-deps.gengithubactions.main')
-    parser.add_argument('roledirs', nargs='*', default=['.'])
+    parser.add_argument('roledirs', nargs='*', default=[os.getcwd()])
     parser.add_argument('--ver', default="v1")
     args = parser.parse_args()
     for role_dir in args.roledirs:

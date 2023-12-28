@@ -51,7 +51,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='uses ansible-galaxy to install all dependencies from test-requirements.yml and meta/requirements.yml'
     )
-    parser.add_argument('roledirs', nargs='*', default=['.'])
+    parser.add_argument('roledirs', nargs='*', default=[os.getcwd()])
     args = parser.parse_args()
     for roledir in args.roledirs:
         run(roledir)

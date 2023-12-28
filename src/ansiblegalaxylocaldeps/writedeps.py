@@ -22,7 +22,7 @@ def main() -> None:
   parser = argparse.ArgumentParser(
     description='extracts dependencies from meta/main.yml and writes out meta/requirements.yml'
   )
-  parser.add_argument('roledirs', nargs='*', default=['.'])
+  parser.add_argument('roledirs', nargs='*', default=[os.getcwd()])
   args = parser.parse_args()
   for roledir in args.roledirs:
     run(roledir)

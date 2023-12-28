@@ -116,7 +116,7 @@ def main() -> None:
   parser = argparse.ArgumentParser(
     description="modified dependencies in meta/requirements.yml and test-requirements.yml files"
   )
-  parser.add_argument('roledirs', nargs='*', default=['.'])
+  parser.add_argument('roledirs', nargs='*', default=[os.getcwd()])
   parser.add_argument('--role')
   parser.add_argument('--fromver', default=None)
   parser.add_argument('--torole', default=None)
