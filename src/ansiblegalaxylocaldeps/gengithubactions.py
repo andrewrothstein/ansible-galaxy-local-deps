@@ -33,6 +33,9 @@ def render_meta_main(role_dir: str, pm):
 
     mm['galaxy_info']['platforms'] = platform_matrix.render_platforms(pm)
 
+    if 'namespace' not in mm['galaxy_info']:
+        mm['galaxy_info']['namespace'] = 'andrewrothstein'
+
     if 'role_name' not in mm['galaxy_info']:
         log.info('computing role_name from role directory: {}'.format(role_dir))
         d = os.path.basename(role_dir)
