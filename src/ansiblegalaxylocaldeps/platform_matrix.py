@@ -23,14 +23,14 @@ latest_pairs = {
 
 upgrades = {
     "alpine": {
-        "3.19": {"3.19"},
+        "3.20": {"3.20"},
         "edge": {"edge"}
     },
     "debian": {
         "bookworm": {"bookworm"}
     },
     "fedora": {
-        "39": {"39"}
+        "40": {"40"}
     },
     "rockylinux": {
         "9": {"9"}
