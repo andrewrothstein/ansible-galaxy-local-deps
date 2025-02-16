@@ -13,24 +13,24 @@ galaxy_os_name = {
 }
 
 latest_pairs = {
-    "alpine": {"3.19", "3.20"},
+    "alpine": {"3.20", "3.21"},
     "archlinux": {"latest"},
     "debian": {"bookworm", "bullseye"},
-    "fedora": {"39", "40"},
+    "fedora": {"40", "41"},
     "rockylinux": {"8", "9"},
     "ubuntu": {"jammy", "noble"}
 }
 
 upgrades = {
     "alpine": {
-        "3.20": {"3.20"},
+        "3.21": {"3.21"},
         "edge": {"edge"}
     },
     "debian": {
         "bookworm": {"bookworm"}
     },
     "fedora": {
-        "40": {"40"}
+        "41": {"41"}
     },
     "rockylinux": {
         "9": {"9"}
