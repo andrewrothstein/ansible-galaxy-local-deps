@@ -13,7 +13,7 @@ class TestDeps(TestCase):
         y = load(
 """
 ---
-- alpine_3.20
+- alpine_3.21
 - ubuntu_noble
 """,
             Loader=Loader
@@ -21,7 +21,7 @@ class TestDeps(TestCase):
         pm = from_dcb_osl(y)
         self.assertEqual(len(pm), 2, 'count from converted dcb-os.yml')
         self.assertEqual(pm[0]["OS"], "alpine")
-        self.assertEqual(pm[0]["OS_VER"], "3.20")
+        self.assertEqual(pm[0]["OS_VER"], "3.21")
         self.assertEqual(pm[1]["OS"], "ubuntu")
         self.assertEqual(pm[1]["OS_VER"], "noble")
 
@@ -29,15 +29,15 @@ class TestDeps(TestCase):
         pm = upgrade([
             {
                 "OS": "alpine",
-                "OS_VER": "3.18"
+                "OS_VER": "3.19"
             },
             {
                 "OS": "alpine",
-                "OS_VER": "3.19"
+                "OS_VER": "3.20"
             }
         ])
         self.assertEqual(len(pm), 2, 'count from converted dcb-os.yml')
         self.assertEqual(pm[0]["OS"], "alpine")
-        self.assertEqual(pm[0]["OS_VER"], "3.19")
+        self.assertEqual(pm[0]["OS_VER"], "3.20")
         self.assertEqual(pm[1]["OS"], "alpine")
-        self.assertEqual(pm[1]["OS_VER"], "3.20")
+        self.assertEqual(pm[1]["OS_VER"], "3.21")
