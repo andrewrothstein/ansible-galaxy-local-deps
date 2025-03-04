@@ -68,5 +68,6 @@ def dump_gitignore(role_dir: str):
             'Dockerfile.*',
             'requirements.yml',
             '!meta/requirements.yml',
-            '**/*undo-tree*'
+            '**/*undo-tree*',
+            '.ansible'
         ]))
