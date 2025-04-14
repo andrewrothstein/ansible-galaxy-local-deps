@@ -16,7 +16,7 @@ latest_pairs = {
     "alpine": {"3.20", "3.21"},
     "archlinux": {"latest"},
     "debian": {"bookworm", "bullseye"},
-    "fedora": {"40", "41"},
+    "fedora": {"41", "42"},
     "rockylinux": {"8", "9"},
     "ubuntu": {"jammy", "noble"}
 }
