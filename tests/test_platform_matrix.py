@@ -29,15 +29,15 @@ class TestDeps(TestCase):
         pm = upgrade([
             {
                 "OS": "alpine",
-                "OS_VER": "3.19"
+                "OS_VER": "3.20"
             },
             {
                 "OS": "alpine",
-                "OS_VER": "3.20"
+                "OS_VER": "3.21"
             }
         ])
         self.assertEqual(len(pm), 2, 'count from converted dcb-os.yml')
         self.assertEqual(pm[0]["OS"], "alpine")
-        self.assertEqual(pm[0]["OS_VER"], "3.20")
+        self.assertEqual(pm[0]["OS_VER"], "3.21")
         self.assertEqual(pm[1]["OS"], "alpine")
-        self.assertEqual(pm[1]["OS_VER"], "3.21")
+        self.assertEqual(pm[1]["OS_VER"], "3.22")

@@ -13,7 +13,7 @@ galaxy_os_name = {
 }
 
 latest_pairs = {
-    "alpine": {"3.20", "3.21"},
+    "alpine": {"3.21", "3.22"},
     "archlinux": {"latest"},
     "debian": {"bookworm", "bullseye"},
     "fedora": {"41", "42"},
