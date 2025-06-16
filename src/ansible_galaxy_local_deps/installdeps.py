@@ -16,6 +16,7 @@ def install_role(r: str, v: str = None) -> None:
 
 
 def install_all(y) -> None:
+    log = logging.getLogger("ansible-galaxy-local-deps.installdeps.install_all")
     if y is not None:
         for d in y:
             efk = deps.effkey(d)
@@ -28,9 +29,8 @@ def install_all(y) -> None:
 
 
 def run(role_dir: str) -> None:
-    log = logging.getLogger("ansible-galaxy-local-deps.installdeps.run")
-    install_all(deps.extract_dependencies(slurp.slurp_meta_requirements(role_dir)))
-    install_all(deps.extract_dependencies(slurp.slurp_test_requirements(role_dir)))
+    install_all(deps.extract_dependencies(slurp.slurp_meta_requirements_yml(role_dir)))
+    install_all(deps.extract_dependencies(slurp.slurp_test_requirements_yml(role_dir)))
 
 
 def main():

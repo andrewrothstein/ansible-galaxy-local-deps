@@ -1,6 +1,3 @@
-import logging
-import json
-
 galaxy_alls = {"alpine", "archlinux"}
 
 galaxy_os_name = {

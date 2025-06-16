@@ -29,9 +29,9 @@ def render_meta_main(role_dir: str, pm):
     mm = slurp.slurp_meta_main_yml(role_dir)
 
     # flatten the license list
-    l = mm["galaxy_info"]["license"]
-    if isinstance(l, list):
-        mm["galaxy_info"]["license"] = l[0]
+    lic = mm["galaxy_info"]["license"]
+    if isinstance(lic, list):
+        mm["galaxy_info"]["license"] = lic[0]
 
     min_ansible_version = mm["galaxy_info"]["min_ansible_version"]
     if isinstance(min_ansible_version, float):
@@ -78,7 +78,6 @@ def main():
     parser = argparse.ArgumentParser(
         description="generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake"
     )
-    log = logging.getLogger("ansible-galaxy-local-deps.gengithubactions.main")
     parser.add_argument("roledirs", nargs="*", default=[os.getcwd()])
     parser.add_argument("--ver", default="v1")
     args = parser.parse_args()
