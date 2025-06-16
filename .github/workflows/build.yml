@@ -4,35 +4,26 @@ name: publish to (test.)pypi.org
 on: push
 
 jobs:
-  build-n-publish:
-    name: build and publish to (test.)pypi.org
+  test-build-publish:
+    name: test, build and perhaps publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: install task
-        uses: arduino/setup-task@v1
-      - name: task ver
-        run: task --version
-      - name: download task mono
+      - name: checkout
         uses: actions/checkout@v4
-        with:
-          repository: andrewrothstein/tasks
-          ref: develop
-          path: taskmono
-      - name: 'task #ftw'
-        run: task -t taskmono/python-test.yml
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+      - name: Run tests
+        run: uv run --frozen pytest tests
+      - name: Build
+        run: uv build
       - name: deploy to test.pypi.org
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository-url: https://test.pypi.org/legacy/
-          skip-existing: true
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+        run: |
+          uv publish \
+            --publish-url https://test.pypi.org/legacy/ \
+            --trusted-publishing always
       - name: deploy to pypi.org
         if: startsWith(github.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          uv publish \
+            --trusted-publishing always
