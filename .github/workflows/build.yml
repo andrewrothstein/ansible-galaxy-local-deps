@@ -7,6 +7,9 @@ jobs:
   test-build-publish:
     name: test, build and perhaps publish
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: checkout
         uses: actions/checkout@v4
