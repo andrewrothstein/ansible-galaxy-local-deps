@@ -1,6 +1,6 @@
 [project]
 name = "ansible-galaxy-local-deps"
-version = "0.5.6"
+version = "0.6.0"
 description = "CLI for interacting with Ansible roles and their CIs"
 readme = "README.md"
 authors = [
