@@ -1,0 +1,27 @@
+[project]
+name = "ansible-galaxy-local-deps"
+version = "0.6.0"
+description = "CLI for interacting with Ansible roles and their CIs"
+readme = "README.md"
+authors = [
+    { name = "Andrew Rothstein", email = "andrew.rothstein@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    'PyYAML'
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+]
+
+[project.scripts]
+ansible-galaxy-local-deps-install = "ansible_galaxy_local_deps.installdeps:main"
+ansible-galaxy-local-deps-write = "ansible_galaxy_local_deps.writedeps:main"
+gengithubactions = "ansible_galaxy_local_deps.gengithubactions:main"
+ansible-galaxy-local-deps-change-dep = "ansible_galaxy_local_deps.changedep:main"

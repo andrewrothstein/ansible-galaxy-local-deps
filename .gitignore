@@ -12,3 +12,5 @@ __pycache__/
 .tox
 .cache
 .venv
+
+.idea

@@ -1,7 +1,4 @@
-import logging
-import json
-
-galaxy_alls = {'alpine', 'archlinux'}
+galaxy_alls = {"alpine", "archlinux"}
 
 galaxy_os_name = {
     "alpine": "Alpine",
@@ -9,7 +6,7 @@ galaxy_os_name = {
     "debian": "Debian",
     "fedora": "Fedora",
     "rockylinux": "EL",
-    "ubuntu": "Ubuntu"
+    "ubuntu": "Ubuntu",
 }
 
 latest_pairs = {
@@ -18,27 +15,17 @@ latest_pairs = {
     "debian": {"bookworm", "bullseye"},
     "fedora": {"41", "42"},
     "rockylinux": {"8", "9"},
-    "ubuntu": {"jammy", "noble"}
+    "ubuntu": {"jammy", "noble"},
 }
 
 upgrades = {
-    "alpine": {
-        "3.21": {"3.21"},
-        "edge": {"edge"}
-    },
-    "debian": {
-        "bookworm": {"bookworm"}
-    },
-    "fedora": {
-        "41": {"41"}
-    },
-    "rockylinux": {
-        "9": {"9"}
-    },
-    "ubuntu": {
-        "noble": {"noble"}
-    }
+    "alpine": {"3.21": {"3.21"}, "edge": {"edge"}},
+    "debian": {"bookworm": {"bookworm"}},
+    "fedora": {"41": {"41"}},
+    "rockylinux": {"9": {"9"}},
+    "ubuntu": {"noble": {"noble"}},
 }
+
 
 def upgrade(pm_in):
     by_os = {}
@@ -58,7 +45,6 @@ def upgrade(pm_in):
         else:
             bo |= {os_ver}
 
-
     pm_out = []
     # reinflate sets
     for os in sorted(by_os.keys()):
@@ -66,17 +52,19 @@ def upgrade(pm_in):
             pm_out.append({"OS": os, "OS_VER": os_ver})
     return pm_out
 
+
 def from_dcb_osl(osl):
     pm = []
     for o in osl:
-        s = o.split('_')
-        pm.append({"OS": s[0], "OS_VER" : s[1]})
+        s = o.split("_")
+        pm.append({"OS": s[0], "OS_VER": s[1]})
     return upgrade(pm)
+
 
 def render_platforms(pm):
     by_os = {}
     for p in pm:
-        os = p['OS']
+        os = p["OS"]
         os_name = galaxy_os_name[os]
         bo = by_os.setdefault(os_name, set())
         if os in galaxy_alls:
@@ -87,8 +75,5 @@ def render_platforms(pm):
     # reinflate sets
     platforms = []
     for os_name in sorted(by_os.keys()):
-        platforms.append({
-            "name": os_name,
-            "versions": sorted(by_os[os_name])
-        })
+        platforms.append({"name": os_name, "versions": sorted(by_os[os_name])})
     return platforms
