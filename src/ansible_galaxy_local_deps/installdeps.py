@@ -37,7 +37,7 @@ def run(role_dir: str) -> None:
 
 app = cyclopts.App(
     name="ansible-galaxy-local-deps-install",
-    help="uses ansible-galaxy to install all dependencies from test-requirements.yml and meta/requirements.yml"
+    help="uses ansible-galaxy to install all dependencies from test-requirements.yml and meta/requirements.yml",
 )
 
 
@@ -47,8 +47,8 @@ def main(
         str,
         cyclopts.Parameter(
             help="Role directories to install dependencies for. If not specified, uses current directory."
-        )
-    ]
+        ),
+    ],
 ) -> None:
     """Install Ansible role dependencies using ansible-galaxy."""
     logging_setup.go()

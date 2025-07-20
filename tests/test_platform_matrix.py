@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from yaml import load
 
 try:

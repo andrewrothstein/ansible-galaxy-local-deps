@@ -92,7 +92,7 @@ def run(
 
 app = cyclopts.App(
     name="ansible-galaxy-local-deps-change-dep",
-    help="modified dependencies in meta/requirements.yml and test-requirements.yml files"
+    help="modified dependencies in meta/requirements.yml and test-requirements.yml files",
 )
 
 
@@ -102,32 +102,21 @@ def main(
         str,
         cyclopts.Parameter(
             help="Role directories to modify dependencies in. If not specified, uses current directory."
-        )
+        ),
     ],
     role: Annotated[
-        str,
-        cyclopts.Parameter(
-            help="Name of the role dependency to change"
-        )
+        str, cyclopts.Parameter(help="Name of the role dependency to change")
     ],
     fromver: Annotated[
-        str | None,
-        cyclopts.Parameter(
-            help="Current version of the role (optional)"
-        )
+        str | None, cyclopts.Parameter(help="Current version of the role (optional)")
     ] = None,
     torole: Annotated[
         str | None,
-        cyclopts.Parameter(
-            help="New role name (optional, defaults to same role)"
-        )
+        cyclopts.Parameter(help="New role name (optional, defaults to same role)"),
     ] = None,
     tover: Annotated[
-        str | None,
-        cyclopts.Parameter(
-            help="New version of the role (optional)"
-        )
-    ] = None
+        str | None, cyclopts.Parameter(help="New version of the role (optional)")
+    ] = None,
 ) -> None:
     """Change Ansible role dependencies."""
     loggingsetup.go()

@@ -112,7 +112,7 @@ def mksubdirs(role_dir: str, subs: list[str]) -> None:
 
 app = cyclopts.App(
     name="gengithubactions",
-    help="generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake"
+    help="generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake",
 )
 
 
@@ -122,14 +122,12 @@ def main(
         str,
         cyclopts.Parameter(
             help="Role directories to generate GitHub Actions for. If not specified, uses current directory."
-        )
+        ),
     ],
     ver: Annotated[
         Literal["v1", "v2"],
-        cyclopts.Parameter(
-            help="Version of the GitHub Actions workflow"
-        )
-    ] = "v1"
+        cyclopts.Parameter(help="Version of the GitHub Actions workflow"),
+    ] = "v1",
 ) -> None:
     """Generate GitHub Actions workflow for Ansible roles."""
     loggingsetup.go()

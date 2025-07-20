@@ -19,7 +19,7 @@ def run(role_dir: str) -> None:
 
 app = cyclopts.App(
     name="ansible-galaxy-local-deps-write",
-    help="extracts dependencies from meta/main.yml and writes out meta/requirements.yml"
+    help="extracts dependencies from meta/main.yml and writes out meta/requirements.yml",
 )
 
 
@@ -29,8 +29,8 @@ def main(
         str,
         cyclopts.Parameter(
             help="Role directories to extract dependencies from. If not specified, uses current directory."
-        )
-    ]
+        ),
+    ],
 ) -> None:
     """Extract and write Ansible role dependencies."""
     loggingsetup.go()
