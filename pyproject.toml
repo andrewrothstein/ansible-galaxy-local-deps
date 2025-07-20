@@ -1,14 +1,25 @@
 [project]
 name = "ansible-galaxy-local-deps"
-version = "0.6.0"
+version = "0.6.1"
 description = "CLI for interacting with Ansible roles and their CIs"
 readme = "README.md"
 authors = [
     { name = "Andrew Rothstein", email = "andrew.rothstein@gmail.com" }
 ]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+urls = {Homepage = "https://github.com/andrewrothstein/ansible-galaxy-local-deps"}
 requires-python = ">=3.12"
 dependencies = [
-    'PyYAML'
+    'PyYAML',
+    "cyclopts>=3.0.0",
 ]
 
 [build-system]
@@ -21,7 +32,57 @@ dev = [
 ]
 
 [project.scripts]
-ansible-galaxy-local-deps-install = "ansible_galaxy_local_deps.installdeps:main"
-ansible-galaxy-local-deps-write = "ansible_galaxy_local_deps.writedeps:main"
-gengithubactions = "ansible_galaxy_local_deps.gengithubactions:main"
-ansible-galaxy-local-deps-change-dep = "ansible_galaxy_local_deps.changedep:main"
+ansible-galaxy-local-deps-install = "ansible_galaxy_local_deps.installdeps:app"
+ansible-galaxy-local-deps-write = "ansible_galaxy_local_deps.writedeps:app"
+gengithubactions = "ansible_galaxy_local_deps.gengithubactions:app"
+ansible-galaxy-local-deps-change-dep = "ansible_galaxy_local_deps.changedep:app"
+
+[tool.ruff]
+# Python version target
+target-version = "py312"
+
+# Line length
+line-length = 88
+
+# Exclude directories
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+    "venv",
+]
+
+[tool.ruff.lint]
+# Enable specific rule sets
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "ARG",  # flake8-unused-arguments
+    "SIM",  # flake8-simplify
+]
+
+# Ignore specific rules
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "B008",  # Do not perform function calls in argument defaults
+    "UP032", # Use f-string instead of format (keep for compatibility)
+    "UP030", # Use implicit references for positional format fields
+    "ARG002", # Unused method argument
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow unused imports in __init__ files
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.isort]
+# Use a single line for imports
+force-single-line = false
+# Sort imports by module
+force-sort-within-sections = true
