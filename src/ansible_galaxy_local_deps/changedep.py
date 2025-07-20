@@ -21,7 +21,13 @@ def adjust_role(role_map: dict[str, Any], ek: str, r: str, v: str) -> dict[str, 
     return role_map
 
 
-def rewrite(r_yml: list[dict[str, Any]] | None, from_role: str, from_ver: str, to_role: str, to_ver: str) -> list[dict[str, Any]] | None:
+def rewrite(
+    r_yml: list[dict[str, Any]] | None,
+    from_role: str,
+    from_ver: str,
+    to_role: str,
+    to_ver: str,
+) -> list[dict[str, Any]] | None:
     if r_yml is None:
         return None
 

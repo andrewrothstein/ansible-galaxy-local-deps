@@ -13,7 +13,9 @@ def effkey(d) -> str | None:
         return None
 
 
-def extract_dependencies(requirements_yml: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
+def extract_dependencies(
+    requirements_yml: list[dict[str, Any]] | None,
+) -> list[dict[str, Any]]:
     """extract dependencies from a requirements.yml yaml data"""
     log = logging.getLogger("ansible-galaxy-local-deps.deps.extract_dependencies")
     o = []

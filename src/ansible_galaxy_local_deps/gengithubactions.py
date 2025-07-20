@@ -94,9 +94,7 @@ def upgrade_platform_matrix(role_dir: str) -> None:
 
 
 def mksubdirs(role_dir: str, subs: list[str]) -> None:
-    log = logging.getLogger(
-        "ansible-galaxy-local-deps.gengithubactions.mksubdirs"
-    )
+    log = logging.getLogger("ansible-galaxy-local-deps.gengithubactions.mksubdirs")
     d = role_dir
     for s in subs:
         d = os.path.join(d, s)
@@ -119,8 +117,12 @@ def main() -> None:
         description="generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake"
     )
     parser.add_argument("roledirs", nargs="*", default=[os.getcwd()])
-    parser.add_argument("--ver", default="v1", choices=["v1", "v2"],
-                        help="Version of the GitHub Actions workflow (default: v1)")
+    parser.add_argument(
+        "--ver",
+        default="v1",
+        choices=["v1", "v2"],
+        help="Version of the GitHub Actions workflow (default: v1)",
+    )
     args = parser.parse_args()
 
     for role_dir in args.roledirs:
@@ -141,5 +143,7 @@ def main() -> None:
             dump.dump_github_actions_build_yml(role_dir, build_yml(args.ver))
             dump.dump_gitignore(role_dir)
         except Exception as e:
-            log.error("Failed to generate GitHub Actions for {}: {}".format(role_dir, e))
+            log.error(
+                "Failed to generate GitHub Actions for {}: {}".format(role_dir, e)
+            )
             raise
