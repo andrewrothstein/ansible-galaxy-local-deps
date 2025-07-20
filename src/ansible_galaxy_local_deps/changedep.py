@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+from typing import Any
 
 import ansible_galaxy_local_deps.deps as deps
 import ansible_galaxy_local_deps.dump as dump
@@ -8,7 +9,7 @@ import ansible_galaxy_local_deps.logging_setup as loggingsetup
 import ansible_galaxy_local_deps.slurp as slurp
 
 
-def adjust_role(role_map, ek: str, r: str, v: str):
+def adjust_role(role_map: dict[str, Any], ek: str, r: str, v: str) -> dict[str, Any]:
     if ek != "name":
         role_map["name"] = role_map[ek]
         role_map.pop(ek)
@@ -20,7 +21,7 @@ def adjust_role(role_map, ek: str, r: str, v: str):
     return role_map
 
 
-def rewrite(r_yml, from_role: str, from_ver: str, to_role: str, to_ver: str):
+def rewrite(r_yml: list[dict[str, Any]] | None, from_role: str, from_ver: str, to_role: str, to_ver: str) -> list[dict[str, Any]] | None:
     if r_yml is None:
         return None
 
@@ -29,10 +30,7 @@ def rewrite(r_yml, from_role: str, from_ver: str, to_role: str, to_ver: str):
     for r in r_yml:
         ek = deps.effkey(r)
         if ek is not None and from_role == r[ek]:
-            if from_ver is None:
-                o.append(adjust_role(r, ek, to_role, to_ver))
-                modified = True
-            elif "version" in r and r["version"] == from_ver:
+            if from_ver is None or "version" in r and r["version"] == from_ver:
                 o.append(adjust_role(r, ek, to_role, to_ver))
                 modified = True
             else:
@@ -44,7 +42,7 @@ def rewrite(r_yml, from_role: str, from_ver: str, to_role: str, to_ver: str):
 
 def rewrite_meta_requirements_yml(
     role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str
-):
+) -> None:
     modified = rewrite(
         slurp.slurp_meta_requirements_yml(role_dir),
         from_role,
@@ -58,7 +56,7 @@ def rewrite_meta_requirements_yml(
 
 def rewrite_test_requirements_yml(
     role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str
-):
+) -> None:
     modified = rewrite(
         slurp.slurp_test_requirements_yml(role_dir),
         from_role,

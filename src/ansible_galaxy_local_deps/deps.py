@@ -1,9 +1,8 @@
 import logging
+from typing import Any
 
-from typing import Union
 
-
-def effkey(d) -> Union[str, None]:
+def effkey(d) -> str | None:
     if "name" in d:
         return "name"
     elif "role" in d:
@@ -14,7 +13,7 @@ def effkey(d) -> Union[str, None]:
         return None
 
 
-def extract_dependencies(requirements_yml):
+def extract_dependencies(requirements_yml: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     """extract dependencies from a requirements.yml yaml data"""
     log = logging.getLogger("ansible-galaxy-local-deps.deps.extract_dependencies")
     o = []
@@ -26,5 +25,5 @@ def extract_dependencies(requirements_yml):
                 r.pop(key)
             o.append(r)
         else:
-            log.warn("ignoring dependency: {0}".format(r))
+            log.warning("ignoring dependency: {0}".format(r))
     return o

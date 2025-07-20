@@ -1,3 +1,5 @@
+from typing import Any
+
 galaxy_alls = {"alpine", "archlinux"}
 
 galaxy_os_name = {
@@ -27,7 +29,7 @@ upgrades = {
 }
 
 
-def upgrade(pm_in):
+def upgrade(pm_in: list[dict[str, Any]]) -> list[dict[str, Any]]:
     by_os = {}
     # apply upgrades and flatten to set
     for p in pm_in:
@@ -36,7 +38,7 @@ def upgrade(pm_in):
 
         os_ver = p["OS_VER"]
 
-        if os in upgrades.keys():
+        if os in upgrades:
             ups = upgrades[os]
             if os_ver in ups:
                 bo |= ups[os_ver]
@@ -53,7 +55,7 @@ def upgrade(pm_in):
     return pm_out
 
 
-def from_dcb_osl(osl):
+def from_dcb_osl(osl: list[str]) -> list[dict[str, Any]]:
     pm = []
     for o in osl:
         s = o.split("_")
@@ -61,7 +63,7 @@ def from_dcb_osl(osl):
     return upgrade(pm)
 
 
-def render_platforms(pm):
+def render_platforms(pm: list[dict[str, Any]]) -> list[dict[str, Any]]:
     by_os = {}
     for p in pm:
         os = p["OS"]
