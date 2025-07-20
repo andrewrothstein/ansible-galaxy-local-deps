@@ -18,7 +18,8 @@ classifiers = [
 urls = {Homepage = "https://github.com/andrewrothstein/ansible-galaxy-local-deps"}
 requires-python = ">=3.12"
 dependencies = [
-    'PyYAML'
+    'PyYAML',
+    "cyclopts>=3.0.0",
 ]
 
 [build-system]
@@ -31,10 +32,10 @@ dev = [
 ]
 
 [project.scripts]
-ansible-galaxy-local-deps-install = "ansible_galaxy_local_deps.installdeps:main"
-ansible-galaxy-local-deps-write = "ansible_galaxy_local_deps.writedeps:main"
-gengithubactions = "ansible_galaxy_local_deps.gengithubactions:main"
-ansible-galaxy-local-deps-change-dep = "ansible_galaxy_local_deps.changedep:main"
+ansible-galaxy-local-deps-install = "ansible_galaxy_local_deps.installdeps:app"
+ansible-galaxy-local-deps-write = "ansible_galaxy_local_deps.writedeps:app"
+gengithubactions = "ansible_galaxy_local_deps.gengithubactions:app"
+ansible-galaxy-local-deps-change-dep = "ansible_galaxy_local_deps.changedep:app"
 
 [tool.ruff]
 # Python version target

@@ -18,6 +18,8 @@ def extract_dependencies(
 ) -> list[dict[str, Any]]:
     """extract dependencies from a requirements.yml yaml data"""
     log = logging.getLogger("ansible-galaxy-local-deps.deps.extract_dependencies")
+    if requirements_yml is None:
+        return []
     o = []
     for r in requirements_yml:
         key = effkey(r)

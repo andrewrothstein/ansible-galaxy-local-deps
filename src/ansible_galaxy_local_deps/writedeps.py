@@ -1,5 +1,7 @@
-import argparse
 import os
+from typing import Annotated
+
+import cyclopts
 
 import ansible_galaxy_local_deps.deps as deps
 import ansible_galaxy_local_deps.dump as dump
@@ -15,13 +17,26 @@ def run(role_dir: str) -> None:
         )
 
 
-def main() -> None:
+app = cyclopts.App(
+    name="ansible-galaxy-local-deps-write",
+    help="extracts dependencies from meta/main.yml and writes out meta/requirements.yml"
+)
+
+
+@app.default
+def main(
+    *roledirs: Annotated[
+        str,
+        cyclopts.Parameter(
+            help="Role directories to extract dependencies from. If not specified, uses current directory."
+        )
+    ]
+) -> None:
+    """Extract and write Ansible role dependencies."""
     loggingsetup.go()
 
-    parser = argparse.ArgumentParser(
-        description="extracts dependencies from meta/main.yml and writes out meta/requirements.yml"
-    )
-    parser.add_argument("roledirs", nargs="*", default=[os.getcwd()])
-    args = parser.parse_args()
-    for roledir in args.roledirs:
+    # Default to current directory if no directories specified
+    dirs_to_process = list(roledirs) if roledirs else [os.getcwd()]
+
+    for roledir in dirs_to_process:
         run(roledir)

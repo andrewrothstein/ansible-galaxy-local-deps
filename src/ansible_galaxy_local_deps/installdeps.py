@@ -1,8 +1,9 @@
-import argparse
 import logging
 import os
 from subprocess import check_call
-from typing import Any
+from typing import Annotated, Any
+
+import cyclopts
 
 import ansible_galaxy_local_deps.deps as deps
 import ansible_galaxy_local_deps.logging_setup as logging_setup
@@ -34,24 +35,36 @@ def run(role_dir: str) -> None:
     install_all(deps.extract_dependencies(slurp.slurp_test_requirements_yml(role_dir)))
 
 
-def main() -> None:
+app = cyclopts.App(
+    name="ansible-galaxy-local-deps-install",
+    help="uses ansible-galaxy to install all dependencies from test-requirements.yml and meta/requirements.yml"
+)
+
+
+@app.default
+def main(
+    *roledirs: Annotated[
+        str,
+        cyclopts.Parameter(
+            help="Role directories to install dependencies for. If not specified, uses current directory."
+        )
+    ]
+) -> None:
+    """Install Ansible role dependencies using ansible-galaxy."""
     logging_setup.go()
     log = logging.getLogger("ansible-galaxy-local-deps.installdeps.main")
 
-    parser = argparse.ArgumentParser(
-        description="uses ansible-galaxy to install all dependencies from test-requirements.yml and meta/requirements.yml"
-    )
-    parser.add_argument("roledirs", nargs="*", default=[os.getcwd()])
-    args = parser.parse_args()
+    # Default to current directory if no directories specified
+    dirs_to_process = list(roledirs) if roledirs else [os.getcwd()]
 
-    for roledir in args.roledirs:
+    for roledir in dirs_to_process:
         # Validate role directory exists and is a directory
         if not os.path.exists(roledir):
             log.error("Role directory does not exist: {}".format(roledir))
-            parser.error("Role directory does not exist: {}".format(roledir))
+            raise cyclopts.ValidationError(f"Role directory does not exist: {roledir}")
         if not os.path.isdir(roledir):
             log.error("Path is not a directory: {}".format(roledir))
-            parser.error("Path is not a directory: {}".format(roledir))
+            raise cyclopts.ValidationError(f"Path is not a directory: {roledir}")
 
         # Validate it's an absolute path or convert it
         roledir = os.path.abspath(roledir)

@@ -1,7 +1,8 @@
-import argparse
 import logging
 import os
-from typing import Any
+from typing import Annotated, Any
+
+import cyclopts
 
 import ansible_galaxy_local_deps.deps as deps
 import ansible_galaxy_local_deps.dump as dump
@@ -89,23 +90,59 @@ def run(
     rewrite_test_requirements_yml(role_dir, from_role, from_ver, to_role, to_ver)
 
 
-def main() -> None:
+app = cyclopts.App(
+    name="ansible-galaxy-local-deps-change-dep",
+    help="modified dependencies in meta/requirements.yml and test-requirements.yml files"
+)
+
+
+@app.default
+def main(
+    *roledirs: Annotated[
+        str,
+        cyclopts.Parameter(
+            help="Role directories to modify dependencies in. If not specified, uses current directory."
+        )
+    ],
+    role: Annotated[
+        str,
+        cyclopts.Parameter(
+            help="Name of the role dependency to change"
+        )
+    ],
+    fromver: Annotated[
+        str | None,
+        cyclopts.Parameter(
+            help="Current version of the role (optional)"
+        )
+    ] = None,
+    torole: Annotated[
+        str | None,
+        cyclopts.Parameter(
+            help="New role name (optional, defaults to same role)"
+        )
+    ] = None,
+    tover: Annotated[
+        str | None,
+        cyclopts.Parameter(
+            help="New version of the role (optional)"
+        )
+    ] = None
+) -> None:
+    """Change Ansible role dependencies."""
     loggingsetup.go()
 
-    parser = argparse.ArgumentParser(
-        description="modified dependencies in meta/requirements.yml and test-requirements.yml files"
-    )
-    parser.add_argument("roledirs", nargs="*", default=[os.getcwd()])
-    parser.add_argument("--role")
-    parser.add_argument("--fromver", default=None)
-    parser.add_argument("--torole", default=None)
-    parser.add_argument("--tover", default=None)
-    args = parser.parse_args()
-    for roledir in args.roledirs:
+    # Default to current directory if no directories specified
+    dirs_to_process = list(roledirs) if roledirs else [os.getcwd()]
+
+    # Use original role name if torole not specified
+    target_role = torole if torole is not None else role
+
+    for roledir in dirs_to_process:
         run(
             roledir,
-            args.role,
-            args.fromver,
-            args.role if args.torole is None else args.torole,
-            args.tover,
+            role,
+            fromver,
+            target_role,
+            tover,
         )

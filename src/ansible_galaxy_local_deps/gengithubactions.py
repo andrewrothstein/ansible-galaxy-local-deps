@@ -1,7 +1,8 @@
-import argparse
 import logging
 import os
-from typing import Any
+from typing import Annotated, Any, Literal
+
+import cyclopts
 
 import ansible_galaxy_local_deps.dump as dump
 import ansible_galaxy_local_deps.logging_setup as loggingsetup
@@ -109,30 +110,42 @@ def mksubdirs(role_dir: str, subs: list[str]) -> None:
                 raise
 
 
-def main() -> None:
+app = cyclopts.App(
+    name="gengithubactions",
+    help="generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake"
+)
+
+
+@app.default
+def main(
+    *roledirs: Annotated[
+        str,
+        cyclopts.Parameter(
+            help="Role directories to generate GitHub Actions for. If not specified, uses current directory."
+        )
+    ],
+    ver: Annotated[
+        Literal["v1", "v2"],
+        cyclopts.Parameter(
+            help="Version of the GitHub Actions workflow"
+        )
+    ] = "v1"
+) -> None:
+    """Generate GitHub Actions workflow for Ansible roles."""
     loggingsetup.go()
     log = logging.getLogger("ansible-galaxy-local-deps.gengithubactions.main")
 
-    parser = argparse.ArgumentParser(
-        description="generates a .github/workflows/build.yml for building/testing Ansible roles with docker buildx bake"
-    )
-    parser.add_argument("roledirs", nargs="*", default=[os.getcwd()])
-    parser.add_argument(
-        "--ver",
-        default="v1",
-        choices=["v1", "v2"],
-        help="Version of the GitHub Actions workflow (default: v1)",
-    )
-    args = parser.parse_args()
+    # Default to current directory if no directories specified
+    dirs_to_process = list(roledirs) if roledirs else [os.getcwd()]
 
-    for role_dir in args.roledirs:
+    for role_dir in dirs_to_process:
         # Validate role directory exists and is a directory
         if not os.path.exists(role_dir):
             log.error("Role directory does not exist: {}".format(role_dir))
-            parser.error("Role directory does not exist: {}".format(role_dir))
+            raise cyclopts.ValidationError(f"Role directory does not exist: {role_dir}")
         if not os.path.isdir(role_dir):
             log.error("Path is not a directory: {}".format(role_dir))
-            parser.error("Path is not a directory: {}".format(role_dir))
+            raise cyclopts.ValidationError(f"Path is not a directory: {role_dir}")
 
         # Validate it's an absolute path or convert it
         role_dir = os.path.abspath(role_dir)
@@ -140,7 +153,7 @@ def main() -> None:
         try:
             mksubdirs(role_dir, [".github", "workflows"])
             upgrade_platform_matrix(role_dir)
-            dump.dump_github_actions_build_yml(role_dir, build_yml(args.ver))
+            dump.dump_github_actions_build_yml(role_dir, build_yml(ver))
             dump.dump_gitignore(role_dir)
         except Exception as e:
             log.error(
