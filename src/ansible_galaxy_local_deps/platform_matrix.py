@@ -73,8 +73,10 @@ def apply_default_platforms(pm: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def upgrade(pm_in: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    by_os = {}
-    platforms_map = {}  # Store PLATFORMS for each OS/OS_VER combo
+    by_os: dict[str, set[str]] = {}
+    platforms_map: dict[
+        tuple[str, str], str
+    ] = {}  # Store PLATFORMS for each OS/OS_VER combo
 
     # apply upgrades and flatten to set
     for p in pm_in:
@@ -120,7 +122,7 @@ def from_dcb_osl(osl: list[str]) -> list[dict[str, Any]]:
 
 
 def render_platforms(pm: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    by_os = {}
+    by_os: dict[str, set[str]] = {}
     for p in pm:
         os = p["OS"]
         os_name = galaxy_os_name[os]

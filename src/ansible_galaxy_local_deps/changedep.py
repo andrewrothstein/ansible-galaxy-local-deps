@@ -10,7 +10,9 @@ import ansible_galaxy_local_deps.logging_setup as loggingsetup
 import ansible_galaxy_local_deps.slurp as slurp
 
 
-def adjust_role(role_map: dict[str, Any], ek: str, r: str, v: str) -> dict[str, Any]:
+def adjust_role(
+    role_map: dict[str, Any], ek: str, r: str, v: str | None
+) -> dict[str, Any]:
     if ek != "name":
         role_map["name"] = role_map[ek]
         role_map.pop(ek)
@@ -25,9 +27,9 @@ def adjust_role(role_map: dict[str, Any], ek: str, r: str, v: str) -> dict[str, 
 def rewrite(
     r_yml: list[dict[str, Any]] | None,
     from_role: str,
-    from_ver: str,
+    from_ver: str | None,
     to_role: str,
-    to_ver: str,
+    to_ver: str | None,
 ) -> list[dict[str, Any]] | None:
     if r_yml is None:
         return None
@@ -48,7 +50,11 @@ def rewrite(
 
 
 def rewrite_meta_requirements_yml(
-    role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str
+    role_dir: str,
+    from_role: str,
+    from_ver: str | None,
+    to_role: str,
+    to_ver: str | None,
 ) -> None:
     modified = rewrite(
         slurp.slurp_meta_requirements_yml(role_dir),
@@ -62,7 +68,11 @@ def rewrite_meta_requirements_yml(
 
 
 def rewrite_test_requirements_yml(
-    role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str
+    role_dir: str,
+    from_role: str,
+    from_ver: str | None,
+    to_role: str,
+    to_ver: str | None,
 ) -> None:
     modified = rewrite(
         slurp.slurp_test_requirements_yml(role_dir),
@@ -76,14 +86,18 @@ def rewrite_test_requirements_yml(
 
 
 def run(
-    role_dir: str, from_role: str, from_ver: str, to_role: str, to_ver: str
+    role_dir: str,
+    from_role: str,
+    from_ver: str | None,
+    to_role: str,
+    to_ver: str | None,
 ) -> None:
     log = logging.getLogger("ansible-galaxy-local-deps-change-dep")
 
     log.info(
-        "changing role {0} to {1}".format(
-            from_role if from_ver is None else "{0}:{1}".format(from_role, from_ver),
-            to_role if to_ver is None else "{0}:{1}".format(to_role, to_ver),
+        "changing role {} to {}".format(
+            from_role if from_ver is None else f"{from_role}:{from_ver}",
+            to_role if to_ver is None else f"{to_role}:{to_ver}",
         )
     )
     rewrite_meta_requirements_yml(role_dir, from_role, from_ver, to_role, to_ver)

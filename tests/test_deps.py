@@ -3,9 +3,11 @@ from unittest import TestCase
 from yaml import load
 
 try:
-    from yaml import CLoader as Loader
+    from yaml import CLoader
+
+    Loader = CLoader
 except ImportError:
-    from yaml import Loader
+    from yaml import Loader  # type: ignore[assignment]
 
 from ansible_galaxy_local_deps.deps import effkey, extract_dependencies
 

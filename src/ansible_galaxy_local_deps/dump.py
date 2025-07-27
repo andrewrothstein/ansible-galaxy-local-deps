@@ -14,54 +14,54 @@ class IndentDumper(yaml.Dumper):
 def dump_txt(role_dir: str, f: str, t: str) -> None:
     log = logging.getLogger("ansible-galaxy-local-deps.dump.dump_txt")
     of = os.path.join(role_dir, f)
-    log.info("writing out {}...".format(of))
+    log.info(f"writing out {of}...")
     try:
         os.makedirs(os.path.dirname(of), exist_ok=True)
         with open(of, "w") as w:
             w.write(t)
     except PermissionError:
-        log.error("Permission denied writing: {}".format(of))
+        log.error(f"Permission denied writing: {of}")
         raise
     except OSError as e:
-        log.error("Error writing {}: {}".format(of, e))
+        log.error(f"Error writing {of}: {e}")
         raise
 
 
 def dump_yml(role_dir: str, f: str, y: dict[str, Any] | list[dict[str, Any]]) -> None:
     log = logging.getLogger("ansible-galaxy-local-deps.dump.dump_yml")
     of = os.path.join(role_dir, f)
-    log.info("writing out {}...".format(of))
+    log.info(f"writing out {of}...")
     try:
         os.makedirs(os.path.dirname(of), exist_ok=True)
         with open(of, "w") as s:
             yaml.dump(y, stream=s, explicit_start=True, Dumper=IndentDumper)
     except PermissionError:
-        log.error("Permission denied writing: {}".format(of))
+        log.error(f"Permission denied writing: {of}")
         raise
     except yaml.YAMLError as e:
-        log.error("YAML serialization error for {}: {}".format(of, e))
+        log.error(f"YAML serialization error for {of}: {e}")
         raise
     except OSError as e:
-        log.error("Error writing {}: {}".format(of, e))
+        log.error(f"Error writing {of}: {e}")
         raise
 
 
 def dump_json(role_dir: str, f: str, j: dict[str, Any] | list[dict[str, Any]]) -> None:
     log = logging.getLogger("ansible-galaxy-local-deps.dump.dump_json")
     of = os.path.join(role_dir, f)
-    log.info("writing out {}...".format(of))
+    log.info(f"writing out {of}...")
     try:
         os.makedirs(os.path.dirname(of), exist_ok=True)
         with open(of, "w") as s:
             json.dump(j, s, indent=2)
     except PermissionError:
-        log.error("Permission denied writing: {}".format(of))
+        log.error(f"Permission denied writing: {of}")
         raise
     except TypeError as e:
-        log.error("JSON serialization error for {}: {}".format(of, e))
+        log.error(f"JSON serialization error for {of}: {e}")
         raise
     except OSError as e:
-        log.error("Error writing {}: {}".format(of, e))
+        log.error(f"Error writing {of}: {e}")
         raise
 
 

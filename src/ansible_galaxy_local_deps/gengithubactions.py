@@ -30,7 +30,7 @@ def render_meta_main(role_dir: str, pm: list[dict[str, Any]]) -> None:
     mm = slurp.slurp_meta_main_yml(role_dir)
 
     if mm is None:
-        log.error("Could not find meta/main.yml in {}".format(role_dir))
+        log.error(f"Could not find meta/main.yml in {role_dir}")
         return
 
     if "galaxy_info" not in mm:
@@ -54,11 +54,11 @@ def render_meta_main(role_dir: str, pm: list[dict[str, Any]]) -> None:
         mm["galaxy_info"]["namespace"] = "andrewrothstein"
 
     if "role_name" not in mm["galaxy_info"]:
-        log.info("computing role_name from role directory: {}".format(role_dir))
+        log.info(f"computing role_name from role directory: {role_dir}")
         d = os.path.basename(role_dir)
         if d.startswith("ansible-"):
             rn = d.removeprefix("ansible-")
-            log.info("computed role_name: {}".format(rn))
+            log.info(f"computed role_name: {rn}")
             mm["galaxy_info"]["role_name"] = rn
 
     dump.dump_meta_main_yml(role_dir, mm)
@@ -73,21 +73,21 @@ def upgrade_platform_matrix(role_dir: str) -> None:
     if os.path.exists(dcb_os):
         dcb_data = slurp.slurp_dcb_os_yml(role_dir)
         if dcb_data is None:
-            log.error("Could not read dcb-os.yml in {}".format(role_dir))
+            log.error(f"Could not read dcb-os.yml in {role_dir}")
             return
         pm = platform_matrix.from_dcb_osl(dcb_data)
         try:
             os.remove(dcb_os)
         except PermissionError:
-            log.error("Permission denied removing: {}".format(dcb_os))
+            log.error(f"Permission denied removing: {dcb_os}")
             raise
         except OSError as e:
-            log.error("Error removing {}: {}".format(dcb_os, e))
+            log.error(f"Error removing {dcb_os}: {e}")
             raise
     else:
         pm_data = slurp.slurp_platform_matrix_json(role_dir)
         if pm_data is None:
-            log.error("Could not find platform-matrix-v1.json in {}".format(role_dir))
+            log.error(f"Could not find platform-matrix-v1.json in {role_dir}")
             return
         pm = platform_matrix.upgrade(pm_data)
     dump.dump_platform_matrix_json(role_dir, pm)
@@ -103,10 +103,10 @@ def mksubdirs(role_dir: str, subs: list[str]) -> None:
             try:
                 os.mkdir(d, 0o755)
             except PermissionError:
-                log.error("Permission denied creating directory: {}".format(d))
+                log.error(f"Permission denied creating directory: {d}")
                 raise
             except OSError as e:
-                log.error("Error creating directory {}: {}".format(d, e))
+                log.error(f"Error creating directory {d}: {e}")
                 raise
 
 
@@ -139,10 +139,10 @@ def main(
     for role_dir in dirs_to_process:
         # Validate role directory exists and is a directory
         if not os.path.exists(role_dir):
-            log.error("Role directory does not exist: {}".format(role_dir))
+            log.error(f"Role directory does not exist: {role_dir}")
             raise cyclopts.ValidationError(f"Role directory does not exist: {role_dir}")
         if not os.path.isdir(role_dir):
-            log.error("Path is not a directory: {}".format(role_dir))
+            log.error(f"Path is not a directory: {role_dir}")
             raise cyclopts.ValidationError(f"Path is not a directory: {role_dir}")
 
         # Validate it's an absolute path or convert it
@@ -154,7 +154,5 @@ def main(
             dump.dump_github_actions_build_yml(role_dir, build_yml(ver))
             dump.dump_gitignore(role_dir)
         except Exception as e:
-            log.error(
-                "Failed to generate GitHub Actions for {}: {}".format(role_dir, e)
-            )
+            log.error(f"Failed to generate GitHub Actions for {role_dir}: {e}")
             raise
