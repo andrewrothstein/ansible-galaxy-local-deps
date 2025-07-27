@@ -1,7 +1,7 @@
+from importlib import resources
 import json
 import logging
 import os
-from importlib import resources
 from typing import Any
 
 # These are still needed for render_platforms

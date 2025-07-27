@@ -89,6 +89,7 @@ ignore = [
 "__init__.py" = ["F401"]
 
 [tool.ruff.lint.isort]
+# Black-compatible import sorting is the default in ruff
 # Use a single line for imports
 force-single-line = false
 # Sort imports by module
