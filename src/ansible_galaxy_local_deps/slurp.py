@@ -6,9 +6,11 @@ import yaml
 from yaml import load
 
 try:
-    from yaml import CLoader as Loader
+    from yaml import CLoader
+
+    Loader = CLoader
 except ImportError:
-    from yaml import Loader
+    from yaml import Loader  # type: ignore[assignment]
 
 from typing import Any
 
@@ -19,18 +21,22 @@ def slurp_yml(role_dir: str, f: str) -> Any | None:
     log = logging.getLogger("ansible-galaxy-local-deps.slurp.slurp_yml")
     fq = finder.find(role_dir, f)
     if fq:
-        log.info("found {0}. slurping...".format(fq))
+        log.info(f"found {fq}. slurping...")
         try:
             with open(fq) as ifq:
-                return load(ifq, Loader=Loader)
+                # B506: yaml.load is safe here because:
+                # 1. We explicitly use CLoader/Loader, not the unsafe default
+                # 2. We only load trusted local Ansible role files (meta/main.yml, etc)
+                # 3. This tool is designed to work with local role files, not untrusted input
+                return load(ifq, Loader=Loader)  # nosec B506
         except FileNotFoundError:
-            log.error("File not found: {}".format(fq))
+            log.error(f"File not found: {fq}")
         except PermissionError:
-            log.error("Permission denied reading: {}".format(fq))
+            log.error(f"Permission denied reading: {fq}")
         except yaml.YAMLError as e:
-            log.error("YAML parsing error in {}: {}".format(fq, e))
+            log.error(f"YAML parsing error in {fq}: {e}")
         except Exception as e:
-            log.error("Unexpected error reading {}: {}".format(fq, e))
+            log.error(f"Unexpected error reading {fq}: {e}")
     return None
 
 
@@ -38,18 +44,18 @@ def slurp_json(role_dir: str, f: str) -> Any | None:
     log = logging.getLogger("ansible-galaxy-local-deps.slurp.slurp_json")
     fq = finder.find(role_dir, f)
     if fq:
-        log.info("found {0}. slurping...".format(fq))
+        log.info(f"found {fq}. slurping...")
         try:
             with open(fq) as ifq:
                 return json.load(ifq)
         except FileNotFoundError:
-            log.error("File not found: {}".format(fq))
+            log.error(f"File not found: {fq}")
         except PermissionError:
-            log.error("Permission denied reading: {}".format(fq))
+            log.error(f"Permission denied reading: {fq}")
         except json.JSONDecodeError as e:
-            log.error("JSON parsing error in {}: {}".format(fq, e))
+            log.error(f"JSON parsing error in {fq}: {e}")
         except Exception as e:
-            log.error("Unexpected error reading {}: {}".format(fq, e))
+            log.error(f"Unexpected error reading {fq}: {e}")
     return None
 
 

@@ -29,5 +29,5 @@ def extract_dependencies(
                 r.pop(key)
             o.append(r)
         else:
-            log.warning("ignoring dependency: {0}".format(r))
+            log.warning(f"ignoring dependency: {r}")
     return o

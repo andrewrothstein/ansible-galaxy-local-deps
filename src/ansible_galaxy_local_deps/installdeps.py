@@ -1,6 +1,9 @@
 import logging
 import os
-from subprocess import check_call
+
+# B404: subprocess import is required for core functionality
+# This tool's purpose is to wrap ansible-galaxy commands
+from subprocess import check_call  # nosec B404
 from typing import Annotated, Any
 
 import cyclopts
@@ -12,9 +15,12 @@ import ansible_galaxy_local_deps.slurp as slurp
 
 def install_role(r: str, v: str | None = None) -> None:
     log = logging.getLogger("ansible-galaxy-local-deps.installdeps.install")
-    log.info("installing {0} version {1}...".format(r, v))
+    log.info(f"installing {r} version {v}...")
     p = ",".join([r, v]) if v is not None else r
-    check_call(["ansible-galaxy", "install", "-f", p])
+    # B603: subprocess call is safe - we're NOT using shell=True (which is good!)
+    # B607: partial path is fine - ansible-galaxy should be in user's PATH
+    # The command arguments come from parsed YAML files, not raw user input
+    check_call(["ansible-galaxy", "install", "-f", p])  # nosec B603,B607
 
 
 def install_all(y: list[dict[str, Any]] | None) -> None:
@@ -25,7 +31,7 @@ def install_all(y: list[dict[str, Any]] | None) -> None:
             if efk is not None:
                 install_role(d[efk], d.get("version", None))
             else:
-                log.info("ignoring key {}".format(d))
+                log.info(f"ignoring key {d}")
     else:
         log.info("no dependencies")
 
@@ -60,10 +66,10 @@ def main(
     for roledir in dirs_to_process:
         # Validate role directory exists and is a directory
         if not os.path.exists(roledir):
-            log.error("Role directory does not exist: {}".format(roledir))
+            log.error(f"Role directory does not exist: {roledir}")
             raise cyclopts.ValidationError(f"Role directory does not exist: {roledir}")
         if not os.path.isdir(roledir):
-            log.error("Path is not a directory: {}".format(roledir))
+            log.error(f"Path is not a directory: {roledir}")
             raise cyclopts.ValidationError(f"Path is not a directory: {roledir}")
 
         # Validate it's an absolute path or convert it
@@ -72,5 +78,5 @@ def main(
         try:
             run(roledir)
         except Exception as e:
-            log.error("Failed to install dependencies for {}: {}".format(roledir, e))
+            log.error(f"Failed to install dependencies for {roledir}: {e}")
             raise

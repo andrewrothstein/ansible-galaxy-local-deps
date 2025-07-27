@@ -10,8 +10,8 @@ import ansible_galaxy_local_deps.slurp as slurp
 
 
 def run(role_dir: str) -> None:
-    mm = slurp.slurp_meta_main(role_dir)
-    if "dependencies" in mm:
+    mm = slurp.slurp_meta_main_yml(role_dir)
+    if mm is not None and "dependencies" in mm:
         dump.dump_requirements_yml(
             role_dir, deps.extract_dependencies(mm["dependencies"])
         )

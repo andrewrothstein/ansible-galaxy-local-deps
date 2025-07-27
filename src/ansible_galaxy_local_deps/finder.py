@@ -5,7 +5,7 @@ import os
 def find(role_dir: str, f: str) -> str | None:
     log = logging.getLogger("ansible-galaxy-local-deps.finder.find")
     fq = os.path.join(role_dir, f)
-    log.info("looking for {0}...".format(fq))
+    log.info(f"looking for {fq}...")
     return fq if os.path.isfile(fq) else None
 
 

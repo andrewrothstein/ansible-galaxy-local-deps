@@ -1,0 +1,11 @@
+[
+  {
+    "OS": "debian",
+    "OS_VER": "buster",
+    "PLATFORMS": "linux/amd64"
+  },
+  {
+    "OS": "ubuntu",
+    "OS_VER": "focal"
+  }
+]
